@@ -2,8 +2,8 @@
 **Plasma Flash Reduction (PFR) — Canonical Data & Artifact Schema**
 
 **Status:** required  
-**Audience:** simulation, experiment, MCP, ML, and analysis workflows  
-**Purpose:** Define a single, strict schema for all inputs, outputs, and derived quantities so that COMSOL, Flexcompute, Modulus, and experiments interoperate cleanly.
+**Audience:** simulation, experiment, MCP, NVIDIA PhysicsNeMo / ML, and analysis workflows  
+**Purpose:** Define a single, strict schema for all inputs, outputs, and derived quantities so that **COMSOL**, **Flexcompute**, **NVIDIA PhysicsNeMo**, and experiments interoperate cleanly.
 
 ---
 
@@ -12,7 +12,7 @@
 2. Inputs ≠ outputs ≠ derived KPIs ≠ plots  
 3. Machine-readable first (HDF5 + JSON)  
 4. Spatial fields are never flattened  
-5. Flash physics (ΔB, χ) is first-class
+5. Flash physics (ΔB, χ) is first-class  
 
 ---
 
@@ -46,7 +46,7 @@ results/runs/<run_id>/
   "toolchain": {
     "em": "flexcompute-tidy3d",
     "reactor": "comsol",
-    "ml": "modulus"
+    "ml": "nvidia-physicsnemo"
   },
   "git": {
     "repo": "ricfulop/Flash-Physics-Twin",
@@ -57,53 +57,80 @@ results/runs/<run_id>/
 }
 ```
 
+**Notes**
+- `ml` records the *discovery / inversion engine*, not the physics solver.
+- COMSOL remains the authoritative source of continuum physics fields.
+
 ---
 
 ## 4. Inputs
 All inputs are copied verbatim into `inputs/`.  
-Solvers must **never** read from `params/` directly.
+
+**Rules**
+- Solvers must **never** read directly from `params/`.
+- Every run is self-contained and reproducible from its `inputs/` snapshot.
 
 ---
 
 ## 5. fields.h5 (canonical)
+**Format:** HDF5  
 **Units:** SI  
-**Coordinates:** axisymmetric (r,z) or Cartesian (x,y,z)
+**Coordinates:** axisymmetric `(r,z)` or Cartesian `(x,y,z)`
 
-### 5.1 Attributes
-- coordinate_system
-- geometry_hash
-- units = "SI"
+---
+
+### 5.1 Global attributes (required)
+- `coordinate_system` : `"axisymmetric"` or `"cartesian"`
+- `geometry_hash` : SHA-256 of geometry definition
+- `units` : `"SI"`
+
+---
 
 ### 5.2 Grid
-- `/grid/r`
-- `/grid/z`
+- `/grid/r` (m)  
+- `/grid/z` (m)  
+
+(or `/grid/x`, `/grid/y`, `/grid/z` for 3D)
+
+---
 
 ### 5.3 Electromagnetics
-- `/em/E_mag`
-- `/em/E_bias`
-- `/em/B_mag`
-- `/em/Q_RF`
+- `/em/E_mag`  (V/m)  
+- `/em/E_bias` (V/m)  
+- `/em/B_mag` (T)  
+- `/em/Q_RF`  (W/m³)  
 
-### 5.4 Plasma
-- `/plasma/ne`
-- `/plasma/Te`
-- `/plasma/ni`
+---
 
-### 5.5 Thermal & Flow
-- `/thermal/T_gas`
-- `/thermal/T_wall`
-- `/flow/u_r`
-- `/flow/u_z`
-- `/flow/p`
+### 5.4 Plasma (fluid)
+- `/plasma/ne` (m⁻³)  
+- `/plasma/Te` (K)  
+- `/plasma/ni` (m⁻³)  
+
+---
+
+### 5.5 Thermal & flow
+- `/thermal/T_gas` (K)  
+- `/thermal/T_wall` (K)  
+- `/flow/u_r` (m/s)  
+- `/flow/u_z` (m/s)  
+- `/flow/p` (Pa)  
+
+---
 
 ### 5.6 Species
-- `/species/H2`
-- `/species/H`
-- `/species/H2O`
+- `/species/H2` (mol/m³)  
+- `/species/H` (mol/m³)  
+- `/species/H2O` (mol/m³)  
 
-### 5.7 Flash
-- `/flash/DeltaB`
-- `/flash/chi`
+---
+
+### 5.7 Flash physics (mandatory)
+- `/flash/DeltaB` (J/mol)  
+- `/flash/chi`  (dimensionless, 0–1)  
+
+**Rule:**  
+Any run missing `DeltaB` or `chi` is **invalid**.
 
 ---
 
@@ -136,24 +163,36 @@ Solvers must **never** read from `params/` directly.
 ---
 
 ## 7. Validation rules
-A run is invalid if:
+A run is **invalid** if:
 - required datasets are missing
-- ΔB or χ is absent
+- `DeltaB` or `chi` is absent
 - units are inconsistent
-- KPIs cannot be recomputed from fields
+- KPIs cannot be recomputed from `fields.h5`
+
+These checks must be enforced by `pfr_data_mcp`.
 
 ---
 
-## 8. ML compatibility
+## 8. NVIDIA PhysicsNeMo compatibility
+This schema is intentionally designed for:
+- parameter inversion
+- uncertainty quantification
+- surrogate and operator learning
+
+**Invariants**
 - χ ∈ [0,1]
-- ΔB continuous
-- identical grids per dataset batch
+- ΔB is continuous
+- identical grids across training batches
+
+PhysicsNeMo **consumes** this schema; it does not redefine it.
 
 ---
 
 ## 9. Philosophy
 Flash is new physics.  
-A strict data contract is the guardrail that makes inversion, comparison, and discovery possible.
+A strict data contract is the guardrail that makes **inversion, comparison, and discovery** possible.
+
+If the schema drifts, the science collapses.
 
 ---
 
