@@ -1,0 +1,107 @@
+{
+  "total_configurations": 432,
+  "feasible_configurations": 432,
+  "feasibility_rate": 1.0,
+  "top_5_recommendations": [
+    {
+      "rank": 1,
+      "geometry": {
+        "pin_radius_mm": 2.0,
+        "mesh_standoff_mm": 2.0,
+        "mesh_radius_mm": 48.0,
+        "gap_mm": 46.0
+      },
+      "best_operating_point": {
+        "T_preheat_K": 1200.0,
+        "sigma_eff": 0.01,
+        "bias_V": 1200.0
+      },
+      "performance": {
+        "chi_mean": 0.12700732249787125,
+        "chi_gt_0p5": 0.13,
+        "T_max_K": 1200.716171936436,
+        "E_max_kV_m": 186.90684038381016
+      }
+    },
+    {
+      "rank": 2,
+      "geometry": {
+        "pin_radius_mm": 2.0,
+        "mesh_standoff_mm": 5.0,
+        "mesh_radius_mm": 45.0,
+        "gap_mm": 43.0
+      },
+      "best_operating_point": {
+        "T_preheat_K": 1200.0,
+        "sigma_eff": 0.01,
+        "bias_V": 1200.0
+      },
+      "performance": {
+        "chi_mean": 0.1303655616599242,
+        "chi_gt_0p5": 0.13,
+        "T_max_K": 1200.716171936436,
+        "E_max_kV_m": 190.78113996832914
+      }
+    },
+    {
+      "rank": 3,
+      "geometry": {
+        "pin_radius_mm": 2.0,
+        "mesh_standoff_mm": 10.0,
+        "mesh_radius_mm": 40.0,
+        "gap_mm": 38.0
+      },
+      "best_operating_point": {
+        "T_preheat_K": 1200.0,
+        "sigma_eff": 0.01,
+        "bias_V": 1200.0
+      },
+      "performance": {
+        "chi_mean": 0.13686735604706973,
+        "chi_gt_0p5": 0.14,
+        "T_max_K": 1200.716171936436,
+        "E_max_kV_m": 198.28207121302844
+      }
+    },
+    {
+      "rank": 4,
+      "geometry": {
+        "pin_radius_mm": 2.0,
+        "mesh_standoff_mm": 15.0,
+        "mesh_radius_mm": 35.0,
+        "gap_mm": 33.0
+      },
+      "best_operating_point": {
+        "T_preheat_K": 1100.0,
+        "sigma_eff": 0.01,
+        "bias_V": 1200.0
+      },
+      "performance": {
+        "chi_mean": 0.13832678946720317,
+        "chi_gt_0p5": 0.14,
+        "T_max_K": 1100.716171936436,
+        "E_max_kV_m": 207.5326033045958
+      }
+    },
+    {
+      "rank": 5,
+      "geometry": {
+        "pin_radius_mm": 5.0,
+        "mesh_standoff_mm": 2.0,
+        "mesh_radius_mm": 48.0,
+        "gap_mm": 43.0
+      },
+      "best_operating_point": {
+        "T_preheat_K": 1200.0,
+        "sigma_eff": 0.01,
+        "bias_V": 1200.0
+      },
+      "performance": {
+        "chi_mean": 0.13264284236546778,
+        "chi_gt_0p5": 0.13,
+        "T_max_K": 1200.716171936436,
+        "E_max_kV_m": 105.05078987287816
+      }
+    }
+  ]
+}

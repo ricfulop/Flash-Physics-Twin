@@ -66,6 +66,59 @@ class InversionResult:
         return asdict(self)
 
 
+def chi_model_with_temp(
+    E_bias: np.ndarray, 
+    T_gas: np.ndarray,
+    r_act: float, 
+    B_s: float,
+    DeltaG0_ref: float,
+    beta_T: float,
+    T_ref: float,
+    k_soft: float, 
+    n: int, 
+    F: float = FARADAY_CONSTANT,
+    W_ph: float = 0.0, 
+    DeltaMu_chem: float = 0.0
+) -> np.ndarray:
+    """
+    Compute chi from E_bias and T_gas using temperature-dependent DeltaG0.
+    
+    DeltaG0(T) = DeltaG0_ref - beta_T * (T_gas - T_ref)
+    DeltaB = k_soft * DeltaG0(T) - (n * F * E_bias * r_act + W_ph + DeltaMu_chem)
+    chi = 1 / (1 + exp(DeltaB / B_s))
+    
+    Args:
+        E_bias: Electric field array (V/m)
+        T_gas: Gas temperature array (K)
+        r_act: Activation length (m)
+        B_s: Smoothing scale (J/mol)
+        DeltaG0_ref: Reference Gibbs barrier at T_ref (J/mol)
+        beta_T: Temperature coefficient (J/mol/K)
+        T_ref: Reference temperature (K)
+        k_soft: Softening factor
+        n: Number of electrons
+        F: Faraday constant (C/mol)
+        W_ph: Photon work (J/mol)
+        DeltaMu_chem: Chemical potential contribution (J/mol)
+    
+    Returns:
+        chi: Flash order parameter array (0-1)
+    """
+    # Temperature-dependent Gibbs barrier
+    DeltaG0_T = DeltaG0_ref - beta_T * (T_gas - T_ref)
+    
+    # Barrier reduction from electrochemistry
+    reduction = n * F * E_bias * r_act + W_ph + DeltaMu_chem
+    
+    # Remaining barrier
+    DeltaB = k_soft * DeltaG0_T - reduction
+    
+    # Sigmoid mapping
+    chi = 1.0 / (1.0 + np.exp(DeltaB / B_s))
+    
+    return chi
+
+
 def chi_model(E_bias: np.ndarray, r_act: float, B_s: float, 
               DeltaG0: float, k_soft: float, n: int, F: float = FARADAY_CONSTANT,
               W_ph: float = 0.0, DeltaMu_chem: float = 0.0) -> np.ndarray:
@@ -99,6 +152,125 @@ def chi_model(E_bias: np.ndarray, r_act: float, B_s: float,
     chi = 1.0 / (1.0 + np.exp(DeltaB / B_s))
     
     return chi
+
+
+def mse_loss_with_temp(
+    params: np.ndarray, 
+    E_bias: np.ndarray, 
+    T_gas: np.ndarray,
+    chi_obs: np.ndarray,
+    param_names: List[str], 
+    known: Dict[str, float]
+) -> float:
+    """
+    Compute MSE loss for temperature-dependent DeltaG0(T) model.
+    
+    Args:
+        params: Array of parameter values to optimize
+        E_bias: Observed E_bias values
+        T_gas: Observed T_gas values
+        chi_obs: Observed chi values
+        param_names: Names of parameters being optimized
+        known: Dictionary of known/fixed parameters
+    
+    Returns:
+        Mean squared error
+    """
+    # Build full parameter dict
+    all_params = dict(known)
+    for name, val in zip(param_names, params):
+        all_params[name] = val
+    
+    # Extract parameters
+    r_act = all_params.get('r_act', 1e-9)
+    B_s = all_params.get('B_s', 50000.0)
+    DeltaG0_ref = all_params.get('DeltaG0_ref', all_params.get('DeltaG0', 350000.0))
+    beta_T = all_params.get('beta_T', 100.0)
+    T_ref = all_params.get('T_ref', 400.0)
+    k_soft = all_params.get('k_soft', 1.0)
+    n = int(all_params.get('n', 2))
+    W_ph = all_params.get('W_ph', 0.0)
+    DeltaMu_chem = all_params.get('DeltaMu_chem', 0.0)
+    
+    # Compute predicted chi using temperature-dependent model
+    chi_pred = chi_model_with_temp(
+        E_bias, T_gas, r_act, B_s, DeltaG0_ref, beta_T, T_ref,
+        k_soft, n, W_ph=W_ph, DeltaMu_chem=DeltaMu_chem
+    )
+    
+    # MSE
+    mse = np.mean((chi_pred - chi_obs) ** 2)
+    
+    return mse
+
+
+def fit_inverse_with_temp(
+    E_bias: np.ndarray, 
+    T_gas: np.ndarray,
+    chi_obs: np.ndarray,
+    infer: List[str], 
+    known: Dict[str, float],
+    bounds: Optional[Dict[str, Tuple[float, float]]] = None
+) -> Tuple[Dict[str, float], float]:
+    """
+    Fit temperature-dependent Flash physics parameters by minimizing MSE.
+    
+    Args:
+        E_bias: Observed E_bias values (V/m)
+        T_gas: Observed T_gas values (K)
+        chi_obs: Observed chi values (0-1)
+        infer: List of parameter names to infer
+        known: Dictionary of known/fixed parameters
+        bounds: Optional bounds for each parameter
+    
+    Returns:
+        Tuple of (fitted_params dict, final_mse)
+    """
+    if not SCIPY_AVAILABLE:
+        raise ImportError("scipy is required for parameter inversion")
+    
+    # Default bounds for common parameters
+    default_bounds = {
+        'r_act': (1e-9, 1e-3),
+        'B_s': (1000.0, 500000.0),
+        'DeltaG0_ref': (10000.0, 1e6),
+        'DeltaG0': (10000.0, 1e6),
+        'beta_T': (1.0, 500.0),  # J/mol/K
+        'k_soft': (0.1, 10.0),
+        'W_ph': (0.0, 100000.0),
+        'DeltaMu_chem': (-100000.0, 100000.0),
+    }
+    
+    if bounds is None:
+        bounds = {}
+    
+    # Build bounds array for optimizer
+    param_bounds = []
+    for name in infer:
+        if name in bounds:
+            param_bounds.append(bounds[name])
+        elif name in default_bounds:
+            param_bounds.append(default_bounds[name])
+        else:
+            raise ValueError(f"No bounds defined for parameter: {name}")
+    
+    # Use differential evolution for global optimization
+    result = differential_evolution(
+        mse_loss_with_temp,
+        bounds=param_bounds,
+        args=(E_bias, T_gas, chi_obs, infer, known),
+        seed=42,
+        maxiter=1000,
+        tol=1e-10,
+        polish=True,
+    )
+    
+    # Build result dict
+    fitted = {}
+    for name, val in zip(infer, result.x):
+        fitted[name] = val
+    
+    return fitted, result.fun
 
 
 def mse_loss(params: np.ndarray, E_bias: np.ndarray, chi_obs: np.ndarray,
@@ -1077,3 +1249,277 @@ class InverseTrainer:
             plots["parameter_distributions"] = str(dist_plot)
         
         return plots
+    
+    def load_dataset_with_temp(
+        self, 
+        run_ids: List[str], 
+        runs_dir: Path = Path("results/runs"),
+        aggregation: str = "mean"
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """
+        Load dataset from registered runs including temperature.
+        
+        Args:
+            run_ids: List of run IDs to load
+            runs_dir: Directory containing runs
+            aggregation: How to aggregate field data
+        
+        Returns:
+            Tuple of (E_bias, T_gas, chi) arrays
+        """
+        import h5py
+        
+        E_bias_list = []
+        T_gas_list = []
+        chi_list = []
+        
+        for run_id in run_ids:
+            run_path = runs_dir / run_id
+            fields_file = run_path / "outputs" / "fields.h5"
+            
+            if not fields_file.exists():
+                logger.warning(f"Fields file not found for run {run_id}")
+                continue
+            
+            with h5py.File(fields_file, 'r') as f:
+                E_bias_data = f['em/E_bias'][:]
+                T_gas_data = f['thermal/T_gas'][:]
+                chi_data = f['flash/chi'][:]
+                
+                if aggregation == "mean":
+                    E_bias_list.append(np.mean(E_bias_data))
+                    T_gas_list.append(np.mean(T_gas_data))
+                    chi_list.append(np.mean(chi_data))
+        
+        return np.array(E_bias_list), np.array(T_gas_list), np.array(chi_list)
+    
+    def train_with_temp(
+        self, 
+        problem_id: str, 
+        run_ids: List[str],
+        infer: List[str], 
+        known: Dict[str, Any],
+        output_dir: Optional[str] = None,
+        n_bootstrap: int = 100
+    ) -> InversionResult:
+        """
+        Train inverse model with temperature-dependent DeltaG0(T).
+        """
+        if output_dir:
+            out_path = Path(output_dir)
+        else:
+            out_path = self.results_dir / problem_id
+        out_path.mkdir(parents=True, exist_ok=True)
+        
+        result = InversionResult(
+            problem_id=problem_id,
+            status="running",
+            known_params=dict(known),
+            run_ids=list(run_ids),
+            output_dir=str(out_path),
+        )
+        
+        try:
+            logger.info(f"Loading dataset from {len(run_ids)} runs...")
+            E_bias, T_gas, chi_obs = self.load_dataset_with_temp(run_ids)
+            
+            result.n_points = len(E_bias)
+            logger.info(f"Dataset: {len(E_bias)} points, T range [{T_gas.min():.1f}, {T_gas.max():.1f}] K")
+            
+            known_typed = {k: int(v) if k == 'n' else float(v) for k, v in known.items()}
+            
+            logger.info(f"Fitting parameters: {infer}")
+            fitted, mse = fit_inverse_with_temp(E_bias, T_gas, chi_obs, infer, known_typed)
+            
+            result.fitted_params = fitted
+            result.mse = float(mse)
+            result.rmse = float(np.sqrt(mse))
+            
+            all_params = dict(known_typed)
+            all_params.update(fitted)
+            
+            chi_pred = chi_model_with_temp(
+                E_bias, T_gas,
+                r_act=all_params.get('r_act', 1e-9),
+                B_s=all_params.get('B_s', 50000),
+                DeltaG0_ref=all_params.get('DeltaG0_ref', all_params.get('DeltaG0', 350000)),
+                beta_T=all_params.get('beta_T', 100),
+                T_ref=all_params.get('T_ref', 400),
+                k_soft=all_params.get('k_soft', 1.0),
+                n=int(all_params.get('n', 2)),
+            )
+            ss_res = np.sum((chi_obs - chi_pred) ** 2)
+            ss_tot = np.sum((chi_obs - np.mean(chi_obs)) ** 2)
+            result.r_squared = float(1 - ss_res / ss_tot) if ss_tot > 0 else 0.0
+            
+            logger.info(f"Fit: MSE={mse:.2e}, R²={result.r_squared:.4f}")
+            for name, val in fitted.items():
+                if name == 'r_act':
+                    logger.info(f"  {name} = {val*1e6:.2f} μm")
+                elif name in ['B_s', 'DeltaG0_ref']:
+                    logger.info(f"  {name} = {val/1000:.2f} kJ/mol")
+                elif name == 'beta_T':
+                    logger.info(f"  {name} = {val:.2f} J/(mol·K)")
+            
+            if n_bootstrap > 0:
+                logger.info(f"Bootstrap uncertainty ({n_bootstrap} samples)...")
+                uncertainties = self._bootstrap_with_temp(E_bias, T_gas, chi_obs, infer, known_typed, n_bootstrap)
+                result.param_uncertainties = uncertainties
+            
+            result.status = "success"
+            
+        except Exception as e:
+            logger.error(f"Inversion failed: {e}")
+            result.status = "failed"
+            raise
+        finally:
+            self._problems[problem_id] = result
+            with open(out_path / "inversion_result.json", 'w') as f:
+                json.dump(result.to_dict(), f, indent=2)
+        
+        return result
+    
+    def _bootstrap_with_temp(self, E_bias, T_gas, chi_obs, infer, known, n_bootstrap=100, confidence=0.95):
+        """Bootstrap for temperature-dependent model."""
+        n_points = len(E_bias)
+        results = {name: [] for name in infer}
+        
+        for _ in range(n_bootstrap):
+            idx = np.random.choice(n_points, size=n_points, replace=True)
+            try:
+                fitted, _ = fit_inverse_with_temp(E_bias[idx], T_gas[idx], chi_obs[idx], infer, known)
+                for name in infer:
+                    results[name].append(fitted[name])
+            except:
+                continue
+        
+        alpha = 1 - confidence
+        uncertainties = {}
+        for name in infer:
+            samples = np.array(results[name])
+            if len(samples) >= 10:
+                uncertainties[name] = {
+                    "mean": float(np.mean(samples)),
+                    "std": float(np.std(samples)),
+                    "ci_low": float(np.percentile(samples, 100 * alpha / 2)),
+                    "ci_high": float(np.percentile(samples, 100 * (1 - alpha / 2))),
+                    "n_samples": len(samples),
+                }
+            else:
+                uncertainties[name] = {"mean": np.nan, "std": np.nan, "ci_low": np.nan, "ci_high": np.nan}
+        return uncertainties
+    
+    def train_bayesian_with_temp(
+        self, problem_id: str, run_ids: List[str], infer: List[str],
+        fixed: Dict[str, Any], priors: Dict[str, Dict[str, float]],
+        output_dir: Optional[str] = None, n_samples: int = 500
+    ) -> BayesianInversionResult:
+        """Bayesian inversion with temperature-dependent DeltaG0(T) and priors."""
+        out_path = Path(output_dir) if output_dir else self.results_dir / problem_id
+        out_path.mkdir(parents=True, exist_ok=True)
+        
+        result = BayesianInversionResult(
+            problem_id=problem_id, status="running",
+            run_ids=list(run_ids), output_dir=str(out_path)
+        )
+        
+        try:
+            logger.info(f"Loading dataset from {len(run_ids)} runs...")
+            E_bias, T_gas, chi_obs = self.load_dataset_with_temp(run_ids)
+            result.n_points = len(E_bias)
+            
+            fixed_typed = {k: int(v) if k == 'n' else float(v) for k, v in fixed.items()}
+            prior_specs = {name: PriorSpec(
+                distribution=spec.get('distribution', 'normal'),
+                mean=spec.get('mean', 0), std=spec.get('std', 1),
+                low=spec.get('low', 0), high=spec.get('high', 1),
+            ) for name, spec in priors.items()}
+            result.priors = priors
+            
+            logger.info(f"Bayesian inversion ({n_samples} samples), infer: {infer}, priors: {list(priors.keys())}")
+            
+            all_names = list(infer) + list(prior_specs.keys())
+            posterior_samples = {name: [] for name in all_names}
+            mse_list, r2_list = [], []
+            
+            for i in range(n_samples):
+                prior_vals = {}
+                for name, prior in prior_specs.items():
+                    val = prior.sample(1)[0]
+                    if name == 'beta_T' and val < 1.0:
+                        val = abs(val) + 1.0
+                    prior_vals[name] = val
+                
+                idx = np.random.choice(len(E_bias), size=len(E_bias), replace=True)
+                known_sample = dict(fixed_typed)
+                known_sample.update(prior_vals)
+                
+                try:
+                    fitted, mse = fit_inverse_with_temp(E_bias[idx], T_gas[idx], chi_obs[idx], infer, known_sample)
+                    for name in infer:
+                        posterior_samples[name].append(fitted[name])
+                    for name, val in prior_vals.items():
+                        posterior_samples[name].append(val)
+                    
+                    all_p = dict(known_sample)
+                    all_p.update(fitted)
+                    chi_pred = chi_model_with_temp(
+                        E_bias, T_gas, all_p.get('r_act', 1e-9), all_p.get('B_s', 50000),
+                        all_p.get('DeltaG0_ref', 350000), all_p.get('beta_T', 100),
+                        all_p.get('T_ref', 400), all_p.get('k_soft', 1.0), int(all_p.get('n', 2))
+                    )
+                    ss_res = np.sum((chi_obs - chi_pred) ** 2)
+                    ss_tot = np.sum((chi_obs - np.mean(chi_obs)) ** 2)
+                    mse_list.append(mse)
+                    r2_list.append(1 - ss_res / ss_tot if ss_tot > 0 else 0)
+                except:
+                    continue
+                
+                if (i + 1) % 100 == 0:
+                    logger.info(f"  {i+1}/{n_samples} samples")
+            
+            for name in all_names:
+                posterior_samples[name] = np.array(posterior_samples[name])
+            
+            posterior_stats = {}
+            for name in all_names:
+                samples = posterior_samples[name]
+                if len(samples) > 0:
+                    posterior_stats[name] = {
+                        "mean": float(np.mean(samples)), "std": float(np.std(samples)),
+                        "median": float(np.median(samples)),
+                        "ci_low": float(np.percentile(samples, 2.5)),
+                        "ci_high": float(np.percentile(samples, 97.5)),
+                        "n_samples": len(samples),
+                    }
+            
+            param_arrays = [posterior_samples[n] for n in all_names]
+            corr_mat = np.corrcoef(param_arrays) if all(len(a) > 0 for a in param_arrays) else np.eye(len(all_names))
+            
+            result.posterior_samples = posterior_samples
+            result.posterior_stats = posterior_stats
+            result.correlation_matrix = corr_mat
+            result.param_names = all_names
+            result.mean_mse = float(np.mean(mse_list)) if mse_list else 0.0
+            result.mean_r_squared = float(np.mean(r2_list)) if r2_list else 0.0
+            result.n_samples = len(mse_list)
+            
+            logger.info(f"Complete (R²={result.mean_r_squared:.4f}):")
+            for name, stats in posterior_stats.items():
+                if name == 'r_act':
+                    logger.info(f"  {name}: {stats['mean']*1e6:.2f} ± {stats['std']*1e6:.2f} μm")
+                elif name in ['B_s', 'DeltaG0_ref']:
+                    logger.info(f"  {name}: {stats['mean']/1000:.2f} ± {stats['std']/1000:.2f} kJ/mol")
+                elif name == 'beta_T':
+                    logger.info(f"  {name}: {stats['mean']:.1f} ± {stats['std']:.1f} J/(mol·K)")
+            
+            result.status = "success"
+        except Exception as e:
+            logger.error(f"Failed: {e}")
+            result.status = "failed"
+            raise
+        finally:
+            with open(out_path / "bayesian_result.json", 'w') as f:
+                json.dump(result.to_dict(), f, indent=2)
+        
+        return result
