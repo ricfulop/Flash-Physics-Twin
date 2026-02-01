@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+results/runs/*/outputs/
+results/runs/*/logs/
+results/runs/*/plots/
+*.mph.lock
+
+# Keep run structure but ignore large outputs
+!results/runs/**/run_card.json
+!results/runs/**/inputs/
+
+# Secrets (if any)
+.env
+*.key
+credentials.json

@@ -1,0 +1,76 @@
+{
+  "name": "pfr_data_mcp",
+  "description": "PFR data integrity, schema enforcement, and run registry MCP",
+  "tools": [
+    {
+      "name": "pfr.create_run",
+      "description": "Create a new PFR run directory and initialize run_card.json",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"},
+          "notes": {"type": "string"},
+          "model_version": {"type": "string"},
+          "physics_engine": {"type": "string"},
+          "discovery_engine": {"type": "string"}
+        },
+        "required": ["model_version", "physics_engine", "discovery_engine"]
+      }
+    },
+    {
+      "name": "pfr.snapshot_inputs",
+      "description": "Snapshot params into the run inputs directory and hash them",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"},
+          "params_dir": {"type": "string"}
+        },
+        "required": ["run_id", "params_dir"]
+      }
+    },
+    {
+      "name": "pfr.validate_outputs",
+      "description": "Validate run outputs against PFR_Data_Schema.md",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"}
+        },
+        "required": ["run_id"]
+      }
+    },
+    {
+      "name": "pfr.register_run",
+      "description": "Register a validated run as immutable and queryable",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"}
+        },
+        "required": ["run_id"]
+      }
+    },
+    {
+      "name": "pfr.list_runs",
+      "description": "List runs with optional filters",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "filters": {"type": "object"}
+        }
+      }
+    },
+    {
+      "name": "pfr.get_run",
+      "description": "Get full metadata for a run",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"}
+        },
+        "required": ["run_id"]
+      }
+    }
+  ]
+}

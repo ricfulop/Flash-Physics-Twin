@@ -1,0 +1,30 @@
+# PFR Geometry Parameters (v1.0-minimal)
+# Axisymmetric reactor geometry
+
+coordinate_system: axisymmetric
+
+reactor:
+  radius: 50.8e-3      # [m] inner radius (2 inch)
+  length: 200e-3       # [m] reactor length
+  wall_thickness: 5e-3 # [m] wall thickness
+
+sample:
+  radius: 25e-3        # [m] sample radius
+  thickness: 10e-3     # [m] sample thickness
+  z_position: 100e-3   # [m] sample center z-position
+
+inlet:
+  radius: 10e-3        # [m] gas inlet radius
+  z_position: 0.0      # [m] inlet z-position
+
+outlet:
+  radius: 15e-3        # [m] gas outlet radius
+  z_position: 200e-3   # [m] outlet z-position
+
+electrodes:
+  rf_coil:
+    z_start: 50e-3     # [m] RF coil start position
+    z_end: 150e-3      # [m] RF coil end position
+    n_turns: 5         # number of turns
+  bias:
+    z_position: 100e-3 # [m] bias electrode position

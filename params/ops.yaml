@@ -1,0 +1,29 @@
+# PFR Operating Conditions (v1.0-minimal)
+# Baseline operating parameters
+
+pressure:
+  total: 1000.0        # [Pa] total pressure (~10 mbar)
+
+flow:
+  H2_inlet: 5.0e-5     # [kg/s] H2 mass flow rate
+  inlet_temperature: 300.0  # [K] inlet gas temperature
+
+rf_power:
+  forward: 5000.0      # [W] RF forward power
+  frequency: 13.56e6   # [Hz] RF frequency
+
+bias:
+  voltage: -200.0      # [V] DC bias voltage
+  enabled: true
+
+thermal:
+  wall_temperature: 400.0   # [K] wall temperature (if fixed)
+  wall_bc_type: "fixed"     # "fixed" or "convective"
+
+plasma:
+  ne_initial: 1.0e17   # [m^-3] initial electron density estimate
+  Te_initial: 10000.0  # [K] initial electron temperature (~1 eV)
+
+time:
+  mode: "steady"       # "steady" or "transient"
+  end_time: null       # [s] for transient only

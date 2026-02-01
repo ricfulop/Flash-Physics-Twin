@@ -1,0 +1,130 @@
+{
+  "name": "comsol_mcp",
+  "description": "COMSOL execution MCP for PFR: open model, set params, run pipeline, export canonical outputs",
+  "tools": [
+    {
+      "name": "comsol.open_or_create_model",
+      "description": "Open an existing .mph model or copy a template into the run directory",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"},
+          "template_path": {"type": "string"},
+          "model_path": {"type": "string"}
+        },
+        "required": ["run_id"]
+      }
+    },
+    {
+      "name": "comsol.apply_inputs",
+      "description": "Apply parameters from results/runs/<run_id>/inputs/*.yaml to the COMSOL model",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"},
+          "inputs_dir": {"type": "string"},
+          "strict": {"type": "boolean"}
+        },
+        "required": ["run_id"]
+      }
+    },
+    {
+      "name": "comsol.build_geometry",
+      "description": "Rebuild geometry (if template uses parametric geometry)",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"}
+        },
+        "required": ["run_id"]
+      }
+    },
+    {
+      "name": "comsol.mesh",
+      "description": "Generate mesh (optionally using a named mesh sequence)",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"},
+          "mesh_id": {"type": "string"}
+        },
+        "required": ["run_id"]
+      }
+    },
+    {
+      "name": "comsol.run_pipeline",
+      "description": "Run the standard A→B→C→D pipeline for PFR",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"},
+          "pipeline": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Subset of ['A','B','C','D']"
+          }
+        },
+        "required": ["run_id"]
+      }
+    },
+    {
+      "name": "comsol.run_study",
+      "description": "Run a specific COMSOL study ID (advanced)",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"},
+          "study_id": {"type": "string"}
+        },
+        "required": ["run_id", "study_id"]
+      }
+    },
+    {
+      "name": "comsol.export_fields",
+      "description": "Export fields to outputs/fields.h5 (or intermediate formats), per PFR_Data_Schema",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"},
+          "format": {"type": "string", "enum": ["h5", "csv", "vtk"]},
+          "fields": {"type": "array", "items": {"type": "string"}}
+        },
+        "required": ["run_id"]
+      }
+    },
+    {
+      "name": "comsol.export_kpis",
+      "description": "Export kpis.json to outputs/kpis.json",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"}
+        },
+        "required": ["run_id"]
+      }
+    },
+    {
+      "name": "comsol.render_png",
+      "description": "Render a sanity-check PNG plot into plots/ (e.g., chi map, DeltaB map)",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"},
+          "plot_id": {"type": "string"}
+        },
+        "required": ["run_id", "plot_id"]
+      }
+    },
+    {
+      "name": "comsol.close_model",
+      "description": "Close the model and release resources",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "run_id": {"type": "string"}
+        },
+        "required": ["run_id"]
+      }
+    }
+  ]
+}
