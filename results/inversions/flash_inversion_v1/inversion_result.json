@@ -1,0 +1,45 @@
+{
+  "problem_id": "flash_inversion_v1",
+  "status": "success",
+  "fitted_params": {
+    "r_act": 3.0000000000000024e-05,
+    "B_s": 14999.9999999984
+  },
+  "param_uncertainties": {
+    "r_act": {
+      "mean": 2.9999999999997805e-05,
+      "std": 2.356334219973212e-17,
+      "ci_low": 2.9999999999999316e-05,
+      "ci_high": 3.0000000000000624e-05,
+      "n_samples": 100
+    },
+    "B_s": {
+      "mean": 15000.000000002063,
+      "std": 2.6862239485386052e-08,
+      "ci_low": 14999.999999992688,
+      "ci_high": 15000.000000031621,
+      "n_samples": 100
+    }
+  },
+  "known_params": {
+    "DeltaG0": 350000.0,
+    "k_soft": 1.0,
+    "n": 2,
+    "W_ph": 0.0,
+    "DeltaMu_chem": 0.0
+  },
+  "mse": 2.0557841430116065e-32,
+  "rmse": 1.4338005938803367e-16,
+  "r_squared": 1.0,
+  "n_points": 6,
+  "run_ids": [
+    "science_0V_2026-02-01_025334",
+    "science_1000V_2026-02-01_025345",
+    "science_200V_2026-02-01_025340",
+    "science_400V_2026-02-01_025342",
+    "science_600V_2026-02-01_025343",
+    "science_800V_2026-02-01_025344"
+  ],
+  "output_dir": "results/inversions/flash_inversion_v1",
+  "plots": {}
+}

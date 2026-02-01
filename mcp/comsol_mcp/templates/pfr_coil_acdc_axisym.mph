@@ -1,0 +1,142 @@
+# COMSOL Multiphysics AC/DC Coil Template (Placeholder)
+# Filename: pfr_coil_acdc_axisym.mph
+#
+# This is a placeholder for the actual COMSOL .mph binary file.
+# When COMSOL is available, this model should be created with the following specification.
+#
+# ============================================================================
+# MODEL SPECIFICATION: PFR AC/DC Coil - 2D Axisymmetric
+# ============================================================================
+#
+# Module: AC/DC
+# Dimension: 2D Axisymmetric (r-z coordinates)
+# Study: Frequency Domain (time-harmonic at f_RF)
+#
+# ============================================================================
+# GEOMETRY (comp1/geom1)
+# ============================================================================
+#
+# Domain 1: Gas Region (interior)
+#   - Rectangle: r=[0, R_tube_inner], z=[0, L_reactor]
+#   - Material: Air/H2 mixture (parameterized)
+#   - Conductivity: sigma_eff (parameter for Q_RF calculation)
+#
+# Domain 2: Quartz Tube
+#   - Rectangle: r=[R_tube_inner, R_tube_outer], z=[0, L_reactor]
+#   - Material: Quartz (SiO2)
+#   - epsilon_r = 3.75
+#   - Electrical insulator
+#
+# Domain 3: Coil Region (external current source)
+#   - Multi-turn coil approximation
+#   - Circles/rectangles at z_coil_start to z_coil_end
+#   - n_turns total turns
+#   - Wire cross-section: r_wire (for current density calculation)
+#
+# ============================================================================
+# PARAMETERS (Global Definitions)
+# ============================================================================
+#
+# Geometry:
+#   R_tube_inner    [m]   Inner radius of quartz tube (default: 50.8e-3)
+#   R_tube_outer    [m]   Outer radius of quartz tube (R_tube_inner + wall_thickness)
+#   L_reactor       [m]   Total reactor length (default: 200e-3)
+#   z_coil_start    [m]   Axial start of coil region (default: 50e-3)
+#   z_coil_end      [m]   Axial end of coil region (default: 150e-3)
+#   n_turns         [-]   Number of coil turns (default: 5)
+#   r_coil          [m]   Coil mean radius (default: R_tube_outer + 10e-3)
+#   r_wire          [m]   Wire radius (default: 2e-3)
+#
+# Operating Conditions:
+#   I_coil          [A]   Coil current amplitude (default: 10)
+#   f_RF            [Hz]  RF frequency (default: 13.56e6)
+#   sigma_eff       [S/m] Effective plasma conductivity (default: 0.01)
+#
+# Derived:
+#   omega           [rad/s] Angular frequency = 2*pi*f_RF
+#
+# ============================================================================
+# PHYSICS: Magnetic Fields (mf) - AC/DC Module
+# ============================================================================
+#
+# Equation: Time-harmonic magnetic fields
+#   ∇×(μ⁻¹∇×A) + jωσA = J_ext
+#
+# Where:
+#   A = magnetic vector potential (azimuthal component in axisym)
+#   J_ext = external current density from coil
+#   σ = electrical conductivity (sigma_eff in gas, 0 in quartz)
+#
+# Boundary Conditions:
+#   - Axis (r=0): Axial symmetry
+#   - Outer boundaries: Magnetic insulation (n×A=0)
+#
+# Coil Excitation:
+#   - External Current Density feature
+#   - J_phi = n_turns * I_coil / A_coil
+#   - Where A_coil = cross-sectional area of coil region
+#
+# ============================================================================
+# COMPUTED FIELDS
+# ============================================================================
+#
+# Primary Fields (from mf physics):
+#   - mf.Br: Radial magnetic field component [T]
+#   - mf.Bz: Axial magnetic field component [T]
+#   - mf.normB: Magnetic field magnitude |B| [T]
+#   - mf.Ephi: Induced azimuthal electric field [V/m]
+#   - mf.normE: Electric field magnitude |E| [V/m]
+#
+# Derived Fields:
+#   - B_mag = mf.normB [T]
+#   - E_mag = mf.normE [V/m]
+#   - Q_RF = 0.5 * sigma_eff * mf.normE^2 [W/m³]
+#     (Time-averaged Ohmic heating in gas region only)
+#
+# ============================================================================
+# MESH (mesh1)
+# ============================================================================
+#
+# - Free triangular mesh
+# - Finer mesh in gas region near coil
+# - Maximum element size: L_reactor / 50
+# - Minimum element size: L_reactor / 500
+# - Boundary layer on tube walls (optional)
+#
+# ============================================================================
+# STUDY (std1)
+# ============================================================================
+#
+# Type: Frequency Domain
+# Frequency: f_RF (13.56 MHz)
+#
+# Solver Configuration:
+#   - MUMPS direct solver
+#   - Relative tolerance: 1e-6
+#
+# ============================================================================
+# EXPORT DATASETS
+# ============================================================================
+#
+# Grid export on (r, z) mesh matching PFR schema:
+#   r = linspace(0, R_tube_inner, 100)
+#   z = linspace(0, L_reactor, 200)
+#
+# Fields to export:
+#   - B_mag(r,z)   → /em/B_mag   [T]
+#   - E_mag(r,z)   → /em/E_mag   [V/m]
+#   - Q_RF(r,z)    → /em/Q_RF    [W/m³]
+#
+# ============================================================================
+# PARAMETER SWEEP (optional study)
+# ============================================================================
+#
+# For sigma_eff sweep:
+#   sigma_eff = [0.001, 0.01, 0.1, 1.0, 10.0] S/m
+#
+# For I_coil sweep:
+#   I_coil = [1, 5, 10, 20, 50] A
+#
+# ============================================================================
+# END OF SPECIFICATION
+# ============================================================================

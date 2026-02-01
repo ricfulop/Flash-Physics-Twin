@@ -1,0 +1,131 @@
+{
+  "name": "physicsnemo_mcp",
+  "version": "0.1.0",
+  "description": "PhysicsNeMo MCP server for PFR parameter inversion and surrogate training",
+  "tools": [
+    {
+      "name": "physicsnemo.list_registered_runs",
+      "description": "List all registered PFR runs with optional filters. Returns run metadata for building datasets.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "type": "object",
+            "description": "Optional filters to apply",
+            "properties": {
+              "status": {
+                "type": "string",
+                "description": "Filter by run status (registered, validated, etc.)"
+              },
+              "synthetic_mode": {
+                "type": "string",
+                "description": "Filter by synthetic mode (pipeline, science)"
+              },
+              "notes_contains": {
+                "type": "string",
+                "description": "Filter runs whose notes contain this substring"
+              },
+              "min_bias_V": {
+                "type": "number",
+                "description": "Minimum bias voltage"
+              },
+              "max_bias_V": {
+                "type": "number",
+                "description": "Maximum bias voltage"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "physicsnemo.build_dataset",
+      "description": "Build a dataset from registered runs for training or inversion. Extracts specified targets and features from fields.h5 and kpis.json.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "run_ids": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "List of run IDs to include in the dataset"
+          },
+          "targets": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Target variables to extract (e.g., ['flash/chi', 'flash/DeltaB'])",
+            "default": ["flash/chi"]
+          },
+          "features": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Feature variables to extract (e.g., ['em/E_bias', 'thermal/T_gas'])",
+            "default": ["em/E_bias"]
+          },
+          "aggregation": {
+            "type": "string",
+            "enum": ["mean", "median", "min", "max", "none"],
+            "description": "How to aggregate field data (default: mean)",
+            "default": "mean"
+          }
+        },
+        "required": ["run_ids"]
+      }
+    },
+    {
+      "name": "physicsnemo.train_inverse",
+      "description": "Train an inverse model to infer Flash physics parameters from observed data. Uses the analytical chi-DeltaB relation and fits specified parameters.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": "string",
+            "description": "Unique identifier for this inversion problem"
+          },
+          "run_ids": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "List of run IDs to use as training data"
+          },
+          "infer": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Parameters to infer (e.g., ['r_act', 'B_s'])"
+          },
+          "known": {
+            "type": "object",
+            "description": "Known/fixed parameter values (e.g., {'DeltaG0': 350000, 'k_soft': 1, 'n': 2})"
+          },
+          "output_dir": {
+            "type": "string",
+            "description": "Directory to save results (default: results/inversions/<problem_id>)"
+          },
+          "n_bootstrap": {
+            "type": "integer",
+            "description": "Number of bootstrap samples for uncertainty estimation (default: 100)",
+            "default": 100
+          }
+        },
+        "required": ["problem_id", "run_ids", "infer", "known"]
+      }
+    },
+    {
+      "name": "physicsnemo.report",
+      "description": "Generate a report for a completed inversion problem. Returns fitted parameters, uncertainties, and fit quality metrics.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "problem_id": {
+            "type": "string",
+            "description": "The problem ID to report on"
+          },
+          "include_plots": {
+            "type": "boolean",
+            "description": "Whether to generate fit quality plots (default: true)",
+            "default": true
+          }
+        },
+        "required": ["problem_id"]
+      }
+    }
+  ]
+}

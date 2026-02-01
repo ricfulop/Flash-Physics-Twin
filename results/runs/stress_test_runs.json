@@ -1,0 +1,57 @@
+{
+  "runs": [
+    {
+      "run_id": "stress_0V_2026-02-01_030432",
+      "bias_V": 0,
+      "E_bias_mean": 0.0,
+      "DeltaB_mean": 300000.0,
+      "chi_mean": 2.0611536181902037e-09
+    },
+    {
+      "run_id": "stress_200V_2026-02-01_030440",
+      "bias_V": 200,
+      "E_bias_mean": 20000.0,
+      "DeltaB_mean": 184218.0,
+      "chi_mean": 4.638105195740457e-06
+    },
+    {
+      "run_id": "stress_400V_2026-02-01_030441",
+      "bias_V": 400,
+      "E_bias_mean": 40000.0,
+      "DeltaB_mean": 68436.0,
+      "chi_mean": 0.010329174717536992
+    },
+    {
+      "run_id": "stress_600V_2026-02-01_030442",
+      "bias_V": 600,
+      "E_bias_mean": 60000.0,
+      "DeltaB_mean": -47346.0,
+      "chi_mean": 0.9591601602868377
+    },
+    {
+      "run_id": "stress_800V_2026-02-01_030442",
+      "bias_V": 800,
+      "E_bias_mean": 80000.0,
+      "DeltaB_mean": -163128.0,
+      "chi_mean": 0.9999810786363336
+    },
+    {
+      "run_id": "stress_1000V_2026-02-01_030443",
+      "bias_V": 1000,
+      "E_bias_mean": 100000.0,
+      "DeltaB_mean": -278910.0,
+      "chi_mean": 0.9999999915913089
+    }
+  ],
+  "params": {
+    "DeltaG0": 300000.0,
+    "k_soft": 1.0,
+    "n_electrons": 2,
+    "F": 96485.0,
+    "r_act": 3e-05,
+    "W_ph": 0.0,
+    "DeltaMu_chem": 0.0,
+    "B_s": 15000.0,
+    "gap_distance": 0.01
+  }
+}

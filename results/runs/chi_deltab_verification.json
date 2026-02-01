@@ -1,0 +1,69 @@
+{
+  "results": [
+    {
+      "run_id": "bias_em_0V_2026-02-01_014044",
+      "bias_V": 0,
+      "B_s": 50000.0,
+      "B_s_source": "assumed default (50 kJ/mol)",
+      "mae_pos": 0.26525477496341093,
+      "mae_neg": 0.2872625041245686,
+      "best_match": "positive",
+      "best_mae": 0.26525477496341093
+    },
+    {
+      "run_id": "bias_em_1000V_2026-02-01_014101",
+      "bias_V": 1000,
+      "B_s": 50000.0,
+      "B_s_source": "assumed default (50 kJ/mol)",
+      "mae_pos": 0.5795722948443629,
+      "mae_neg": 0.2897318525721418,
+      "best_match": "negative",
+      "best_mae": 0.2897318525721418
+    },
+    {
+      "run_id": "bias_em_200V_2026-02-01_014052",
+      "bias_V": 200,
+      "B_s": 50000.0,
+      "B_s_source": "assumed default (50 kJ/mol)",
+      "mae_pos": 0.2968500624303094,
+      "mae_neg": 0.23063266307211117,
+      "best_match": "negative",
+      "best_mae": 0.23063266307211117
+    },
+    {
+      "run_id": "bias_em_400V_2026-02-01_014055",
+      "bias_V": 400,
+      "B_s": 50000.0,
+      "B_s_source": "assumed default (50 kJ/mol)",
+      "mae_pos": 0.3463173958381838,
+      "mae_neg": 0.23011138193326552,
+      "best_match": "negative",
+      "best_mae": 0.23011138193326552
+    },
+    {
+      "run_id": "bias_em_600V_2026-02-01_014058",
+      "bias_V": 600,
+      "B_s": 50000.0,
+      "B_s_source": "assumed default (50 kJ/mol)",
+      "mae_pos": 0.41052843294691027,
+      "mae_neg": 0.24323358794974964,
+      "best_match": "negative",
+      "best_mae": 0.24323358794974964
+    },
+    {
+      "run_id": "bias_em_800V_2026-02-01_014059",
+      "bias_V": 800,
+      "B_s": 50000.0,
+      "B_s_source": "assumed default (50 kJ/mol)",
+      "mae_pos": 0.48864035470441913,
+      "mae_neg": 0.26347799189151117,
+      "best_match": "negative",
+      "best_mae": 0.26347799189151117
+    }
+  ],
+  "conclusion": {
+    "sign_convention": "inconsistent",
+    "formula": "chi = 1/(1+exp(+DeltaB/B_s))",
+    "avg_best_mae": 0.2537403753970317
+  }
+}

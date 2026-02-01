@@ -1,0 +1,45 @@
+{
+  "problem_id": "stress_inversion_correct_DeltaG0",
+  "status": "success",
+  "fitted_params": {
+    "r_act": 3.0000000000000024e-05,
+    "B_s": 15000.000000000087
+  },
+  "param_uncertainties": {
+    "r_act": {
+      "mean": 3.0039335565083555e-05,
+      "std": 5.548964311041051e-07,
+      "ci_low": 2.999999999999794e-05,
+      "ci_high": 3.000000000000268e-05,
+      "n_samples": 200
+    },
+    "B_s": {
+      "mean": 14933.450955705275,
+      "std": 938.7897975633567,
+      "ci_low": 14999.999999997603,
+      "ci_high": 15000.000000001117,
+      "n_samples": 200
+    }
+  },
+  "known_params": {
+    "DeltaG0": 300000.0,
+    "k_soft": 1.0,
+    "n": 2,
+    "W_ph": 0.0,
+    "DeltaMu_chem": 0.0
+  },
+  "mse": 3.5662326252515463e-32,
+  "rmse": 1.8884471465337722e-16,
+  "r_squared": 1.0,
+  "n_points": 6,
+  "run_ids": [
+    "stress_0V_2026-02-01_030432",
+    "stress_1000V_2026-02-01_030443",
+    "stress_200V_2026-02-01_030440",
+    "stress_400V_2026-02-01_030441",
+    "stress_600V_2026-02-01_030442",
+    "stress_800V_2026-02-01_030442"
+  ],
+  "output_dir": "results/inversions/stress_inversion_correct_DeltaG0",
+  "plots": {}
+}

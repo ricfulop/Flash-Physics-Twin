@@ -1,0 +1,49 @@
+{
+  "sweep_type": "bias_voltage",
+  "timestamp_utc": "2026-02-01T01:17:58.885807+00:00",
+  "template_model": "results/runs/test_comsol_001/models/pfr_test.mph",
+  "runs": [
+    {
+      "run_id": "bias_sweep_0V_2026-02-01_011740",
+      "bias_voltage": 0,
+      "chi_volume_avg": 0.25,
+      "chi_volume_fraction_gt_0p5": 0.0,
+      "T_gas_avg": 420.89951251245736
+    },
+    {
+      "run_id": "bias_sweep_200V_2026-02-01_011748",
+      "bias_voltage": 200,
+      "chi_volume_avg": 0.32375783889281345,
+      "chi_volume_fraction_gt_0p5": 0.46,
+      "T_gas_avg": 440.89951251245736
+    },
+    {
+      "run_id": "bias_sweep_400V_2026-02-01_011750",
+      "bias_voltage": 400,
+      "chi_volume_avg": 0.40543325621409476,
+      "chi_volume_fraction_gt_0p5": 0.53,
+      "T_gas_avg": 460.89951251245736
+    },
+    {
+      "run_id": "bias_sweep_600V_2026-02-01_011753",
+      "bias_voltage": 600,
+      "chi_volume_avg": 0.4950222677729171,
+      "chi_volume_fraction_gt_0p5": 0.59,
+      "T_gas_avg": 480.89951251245736
+    },
+    {
+      "run_id": "bias_sweep_800V_2026-02-01_011755",
+      "bias_voltage": 800,
+      "chi_volume_avg": 0.5925153214726894,
+      "chi_volume_fraction_gt_0p5": 0.65,
+      "T_gas_avg": 500.89951251245736
+    },
+    {
+      "run_id": "bias_sweep_1000V_2026-02-01_011756",
+      "bias_voltage": 1000,
+      "chi_volume_avg": 0.6978894388851294,
+      "chi_volume_fraction_gt_0p5": 0.7,
+      "T_gas_avg": 520.8995125124574
+    }
+  ]
+}
