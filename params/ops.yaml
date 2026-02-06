@@ -44,3 +44,43 @@ em:
       B_measured: null   # [T] measured B-field at calibration point (optional)
       r_cal: 0.025       # [m] calibration point radius
       z_cal: 0.1         # [m] calibration point z-position
+  
+  # RF-to-Flash coupling
+  rf_coupling:
+    gamma_RF: 0.2        # [dimensionless] RF-to-Flash coupling efficiency
+                         # E_eff = E_bias + gamma_RF * E_RF_induced
+                         # gamma_RF=0 means DC-only activation
+                         # gamma_RF=1 means full RF contribution
+    lambda_onset: 60443.0  # [V/m] onset electric field from PhysicsNeMo inversion
+
+# ============================================================================
+# Powder Fall Region Definition
+# ============================================================================
+# The powder falls through a specific region of the reactor where activation
+# is most critical. KPIs should be computed specifically for this region.
+
+powder_region:
+  # Radial bounds (relative to tube center)
+  # Powder falls in an annular region between r_min and r_max
+  r_min: 0.005         # [m] inner radius of powder fall region (5mm from centerline)
+  r_max: 0.035         # [m] outer radius of powder fall region (35mm from centerline)
+  
+  # Axial bounds
+  # Powder is in the reactor from z_start to z_end
+  z_start: 0.06        # [m] start of powder fall zone (60mm from inlet)
+  z_end: 0.14          # [m] end of powder fall zone (140mm from inlet)
+  
+  # Residence time and exposure
+  fall_velocity: 0.5   # [m/s] approximate powder fall velocity
+  residence_time: 0.16 # [s] time powder spends in active region = (z_end - z_start) / fall_velocity
+
+# ============================================================================
+# Coil Geometry (for EM optimization)
+# ============================================================================
+coil:
+  n_turns: 8           # number of turns
+  inner_radius: 0.055  # [m] coil inner radius (55mm)
+  wire_diameter: 0.006 # [m] copper wire diameter (6mm)
+  z_start: 0.04        # [m] coil start position
+  z_end: 0.16          # [m] coil end position
+  pitch: 0.015         # [m] turn-to-turn spacing

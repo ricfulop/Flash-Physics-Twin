@@ -1,0 +1,21 @@
+{
+  "run_id": "bias_sweep_0V_2026-02-01_011740",
+  "timestamp_utc": "2026-02-01T01:17:40.095294+00:00",
+  "status": "registered",
+  "model_version": "v1.0-minimal",
+  "physics_engine": "COMSOL",
+  "discovery_engine": "NVIDIA-PhysicsNeMo",
+  "notes": "bias sweep: V_bias = 0 V",
+  "input_hashes": {
+    "geometry.yaml": "24a62cf5658ea7fb27e82e3ef13ea27d4877d3b01905ec7f3cf9c1dbc365b94a",
+    "ops.yaml": "ff76d055ef8df763043cc1fb3c8adc383cf8101fa3f374fba15d9a75f3f6654b",
+    "materials.yaml": "a201370ab98c81b954acb2d9241697c3004a9354b29e59112e57e56ff2bfb6e0",
+    "chemistry.yaml": "b72475297c699abf6c69ee42eb846b79761bf8e6c5bb32143325686ef73478aa"
+  },
+  "validation": {
+    "valid": true,
+    "issues": [],
+    "timestamp_utc": "2026-02-01T01:17:48.168071+00:00"
+  },
+  "registered_utc": "2026-02-01T01:17:48.171446+00:00"
+}

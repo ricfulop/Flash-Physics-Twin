@@ -1,0 +1,13 @@
+{
+  "run_id": "pfr_em_2026-02-01_042415",
+  "timestamp_utc": "2026-02-01T04:24:15Z",
+  "toolchain": {
+    "em": "surrogate",
+    "reactor": "COMSOL-coupled",
+    "ml": "none"
+  },
+  "model_version": "v1.0-coupled-em",
+  "physics_engine": "COMSOL-coupled",
+  "status": "registered",
+  "notes": "test canonical DeltaG0(T)"
+}

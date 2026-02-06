@@ -1,0 +1,48 @@
+==========================================================================================
+PFR DIGITAL TWIN: GEOMETRY COMPARISON DEMO
+Generated: 2026-02-05 15:44:13
+==========================================================================================
+
+CANDIDATE GEOMETRIES
+------------------------------------------------------------------------------------------
+  Tight Gap   : a=10mm, b=18mm | gap= 8mm | standoff=32mm | Aggressive E-field, 8mm gap
+  Wide Gap    : a= 4mm, b=22mm | gap=18mm | standoff=28mm | Conservative, 18mm gap
+  Balanced    : a= 6mm, b=20mm | gap=14mm | standoff=30mm | Compromise, 14mm gap
+
+REQUIRED VOLTAGE FOR 40% ACTIVATION
+------------------------------------------------------------------------------------------
+  Geometry     | T=1000K         | T=1100K         | T=1200K        
+  ------------------------------------------------------------
+  Tight Gap    | DC:200V, RF:200V | DC:200V, RF:200V | DC:200V, RF:200V |
+  Wide Gap     | DC:400V, RF:400V | DC:400V, RF:400V | DC:400V, RF:400V |
+  Balanced     | DC:400V, RF:400V | DC:400V, RF:400V | DC:200V, RF:200V |
+
+DUSTING/PLASMA RISK BREAKDOWN (at Pareto-optimal point)
+------------------------------------------------------------------------------------------
+  Geometry     | Total    | Stokes     | Velocity   | Gap        | Standoff  
+  ---------------------------------------------------------------------------
+  Tight Gap    | 0.214    | 0.000      | 0.164      | 0.050      | 0.000     
+  Wide Gap     | 0.825    | 0.784      | 0.041      | 0.000      | 0.000     
+  Balanced     | 0.444    | 0.356      | 0.088      | 0.000      | 0.000     
+
+RESIDENCE TIMES (at T=1100K, Q=20 SLPM)
+------------------------------------------------------------------------------------------
+  Geometry     | τ_powder     | τ_gas_refresh   | Stokes #   | Status         
+  ----------------------------------------------------------------------
+  Tight Gap    | 0.30         | 0.23            | 1.252      | ✓ OK           
+  Wide Gap     | 0.30         | 0.21            | 0.266      | ✓ OK           
+  Balanced     | 0.30         | 0.22            | 0.440      | ✓ OK           
+
+==========================================================================================
+RECOMMENDATION
+==========================================================================================
+
+  MINIMIZE VOLTAGE:  Tight Gap    → 200V for 40% activation
+  MINIMIZE RISK:     Tight Gap    → risk index = 0.214
+
+  PARETO OPTIMAL:    Tight Gap
+    → V = 200V, Risk = 0.214
+    → τ_powder = 0.30s, τ_gas = 0.25s
+    → Stokes = 1.201
+
+==========================================================================================

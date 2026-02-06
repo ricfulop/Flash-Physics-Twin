@@ -1,0 +1,1171 @@
+{
+  "timestamp": "2026-02-04T17:19:49.857454+00:00",
+  "system_defaults": {
+    "phi_p": 0.02,
+    "Q_H2_SLPM": 20.0,
+    "p_bar": 0.15,
+    "L_active": 0.3,
+    "tube_ID": 0.1,
+    "tau_min": 0.3,
+    "tau_max": 3.0,
+    "T_ambient": 300.0,
+    "v_max": 5.0
+  },
+  "physics_params": {
+    "DeltaG0_ref": 350000.0,
+    "T_ref": 1100.0,
+    "beta_T": 100.0,
+    "r_act": 3e-05,
+    "B_s": 15000.0,
+    "n": 2,
+    "lambda_onset": 60443.0
+  },
+  "calibration": {
+    "1000": {
+      "A": 2.3,
+      "B": 0.029
+    },
+    "1100": {
+      "A": 2.45,
+      "B": 0.035
+    },
+    "1200": {
+      "A": 2.6,
+      "B": 0.042
+    }
+  },
+  "results": {
+    "Conservative": {
+      "name": "Conservative",
+      "geometry": {
+        "a_mm": 8.0,
+        "b_mm": 26.0,
+        "gap_mm": 18.0,
+        "description": "Wide gap, moderate E-field, safer thermal margin"
+      },
+      "operating_points": [],
+      "required_V": {
+        "1000": {
+          "0": {
+            "0.1": 670.0,
+            "0.2": 770.0,
+            "0.4": 940.0,
+            "0.6": 1080.0
+          },
+          "0.2": {
+            "0.1": 660.0,
+            "0.2": 760.0,
+            "0.4": 920.0,
+            "0.6": 1060.0
+          },
+          "0.4": {
+            "0.1": 650.0,
+            "0.2": 750.0,
+            "0.4": 910.0,
+            "0.6": 1050.0
+          }
+        },
+        "1100": {
+          "0": {
+            "0.1": 640.0,
+            "0.2": 740.0,
+            "0.4": 890.0,
+            "0.6": 1030.0
+          },
+          "0.2": {
+            "0.1": 630.0,
+            "0.2": 720.0,
+            "0.4": 880.0,
+            "0.6": 1010.0
+          },
+          "0.4": {
+            "0.1": 620.0,
+            "0.2": 710.0,
+            "0.4": 860.0,
+            "0.6": 990.0
+          }
+        },
+        "1200": {
+          "0": {
+            "0.1": 620.0,
+            "0.2": 700.0,
+            "0.4": 850.0,
+            "0.6": 970.0
+          },
+          "0.2": {
+            "0.1": 600.0,
+            "0.2": 690.0,
+            "0.4": 830.0,
+            "0.6": 960.0
+          },
+          "0.4": {
+            "0.1": 590.0,
+            "0.2": 680.0,
+            "0.4": 820.0,
+            "0.6": 940.0
+          }
+        }
+      },
+      "constraints": {
+        "1000": {
+          "a_m": 0.008,
+          "b_m": 0.026,
+          "R_tube_m": 0.05,
+          "g_m": 0.024000000000000004,
+          "g_mm": 24.000000000000004,
+          "gap_m": 0.018,
+          "gap_mm": 18.0,
+          "L_m": 0.3,
+          "A_annulus_m2": 0.005730265000147785,
+          "A_active_m2": 0.0019226547039969532,
+          "V_annulus_m3": 0.0017190795000443352,
+          "V_active_m3": 0.0005767964111990859,
+          "Q_m3s": 0.008135538064148719,
+          "Q_SLPM_actual": 20.0,
+          "v_powder_fall": 0.8155159104047851,
+          "v_fall_range": [
+            0.36245151573546014,
+            1.4498060629418406
+          ],
+          "v_crossflow": 4.23140881575666,
+          "v_annulus_radial": 0.11357992084399453,
+          "tau_powder_active": 0.3678652938249771,
+          "tau_powder_range": [
+            0.2069242277765496,
+            0.8276969111061984
+          ],
+          "tau_gas_refresh": 0.21130495444669956,
+          "tau_gas_active": 0.07089837287356364,
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "Stokes_number": 19.542324855256737,
+          "d_p_median_um": 75.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.0,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "risk_index": 0.0,
+          "risk_acceptable": true,
+          "overall_feasible": true,
+          "T_preheat": 1000,
+          "p_bar": 0.15,
+          "Q_H2_SLPM": 20.0
+        },
+        "1100": {
+          "a_m": 0.008,
+          "b_m": 0.026,
+          "R_tube_m": 0.05,
+          "g_m": 0.024000000000000004,
+          "g_mm": 24.000000000000004,
+          "gap_m": 0.018,
+          "gap_mm": 18.0,
+          "L_m": 0.3,
+          "A_annulus_m2": 0.005730265000147785,
+          "A_active_m2": 0.0019226547039969532,
+          "V_annulus_m3": 0.0017190795000443352,
+          "V_active_m3": 0.0005767964111990859,
+          "Q_m3s": 0.00894909187056359,
+          "Q_SLPM_actual": 20.0,
+          "v_powder_fall": 0.7728162860842731,
+          "v_fall_range": [
+            0.34347390492634366,
+            1.3738956197053747
+          ],
+          "v_crossflow": 4.654549697332325,
+          "v_annulus_radial": 0.12493791292839397,
+          "tau_powder_active": 0.3881905769869942,
+          "tau_powder_range": [
+            0.21835719955518423,
+            0.8734287982207369
+          ],
+          "tau_gas_refresh": 0.19209541313336326,
+          "tau_gas_active": 0.06445306624869422,
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "Stokes_number": 20.371017042227137,
+          "d_p_median_um": 75.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.0,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "risk_index": 0.0,
+          "risk_acceptable": true,
+          "overall_feasible": true,
+          "T_preheat": 1100,
+          "p_bar": 0.15,
+          "Q_H2_SLPM": 20.0
+        },
+        "1200": {
+          "a_m": 0.008,
+          "b_m": 0.026,
+          "R_tube_m": 0.05,
+          "g_m": 0.024000000000000004,
+          "g_mm": 24.000000000000004,
+          "gap_m": 0.018,
+          "gap_mm": 18.0,
+          "L_m": 0.3,
+          "A_annulus_m2": 0.005730265000147785,
+          "A_active_m2": 0.0019226547039969532,
+          "V_annulus_m3": 0.0017190795000443352,
+          "V_active_m3": 0.0005767964111990859,
+          "Q_m3s": 0.009762645676978461,
+          "Q_SLPM_actual": 19.999999999999996,
+          "v_powder_fall": 0.7361273400902543,
+          "v_fall_range": [
+            0.32716770670677975,
+            1.308670826827119
+          ],
+          "v_crossflow": 5.077690578907991,
+          "v_annulus_radial": 0.13629590501279343,
+          "tau_powder_active": 0.4075381848515746,
+          "tau_powder_range": [
+            0.22924022897901067,
+            0.9169609159160427
+          ],
+          "tau_gas_refresh": 0.17608746203891631,
+          "tau_gas_active": 0.059081977394636366,
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "Stokes_number": 21.167907608725887,
+          "d_p_median_um": 75.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.00776905789079918,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "risk_index": 0.001942264472699795,
+          "risk_acceptable": true,
+          "overall_feasible": true,
+          "T_preheat": 1200,
+          "p_bar": 0.15,
+          "Q_H2_SLPM": 20.0
+        }
+      },
+      "feasible": {
+        "1000": {
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "risk_acceptable": true,
+          "overall_feasible": true
+        },
+        "1100": {
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "risk_acceptable": true,
+          "overall_feasible": true
+        },
+        "1200": {
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "risk_acceptable": true,
+          "overall_feasible": true
+        }
+      }
+    },
+    "Aggressive": {
+      "name": "Aggressive",
+      "geometry": {
+        "a_mm": 12.0,
+        "b_mm": 20.0,
+        "gap_mm": 8.0,
+        "description": "Narrow gap, high E-field, optimal activation"
+      },
+      "operating_points": [],
+      "required_V": {
+        "1000": {
+          "0": {
+            "0.1": 400.0,
+            "0.2": 410.0,
+            "0.4": 440.0,
+            "0.6": 460.0
+          },
+          "0.2": {
+            "0.1": 390.0,
+            "0.2": 400.0,
+            "0.4": 430.0,
+            "0.6": 460.0
+          },
+          "0.4": {
+            "0.1": 380.0,
+            "0.2": 400.0,
+            "0.4": 420.0,
+            "0.6": 450.0
+          }
+        },
+        "1100": {
+          "0": {
+            "0.1": 380.0,
+            "0.2": 400.0,
+            "0.4": 420.0,
+            "0.6": 450.0
+          },
+          "0.2": {
+            "0.1": 380.0,
+            "0.2": 390.0,
+            "0.4": 410.0,
+            "0.6": 440.0
+          },
+          "0.4": {
+            "0.1": 370.0,
+            "0.2": 380.0,
+            "0.4": 410.0,
+            "0.6": 430.0
+          }
+        },
+        "1200": {
+          "0": {
+            "0.1": 370.0,
+            "0.2": 380.0,
+            "0.4": 410.0,
+            "0.6": 430.0
+          },
+          "0.2": {
+            "0.1": 370.0,
+            "0.2": 380.0,
+            "0.4": 400.0,
+            "0.6": 420.0
+          },
+          "0.4": {
+            "0.1": 360.0,
+            "0.2": 370.0,
+            "0.4": 390.0,
+            "0.6": 410.0
+          }
+        }
+      },
+      "constraints": {
+        "1000": {
+          "a_m": 0.012,
+          "b_m": 0.02,
+          "R_tube_m": 0.05,
+          "g_m": 0.030000000000000002,
+          "g_mm": 30.000000000000004,
+          "gap_m": 0.008,
+          "gap_mm": 8.0,
+          "L_m": 0.3,
+          "A_annulus_m2": 0.006597344572538567,
+          "A_active_m2": 0.0008042477193189872,
+          "V_annulus_m3": 0.00197920337176157,
+          "V_active_m3": 0.00024127431579569616,
+          "Q_m3s": 0.008135538064148719,
+          "Q_SLPM_actual": 20.0,
+          "v_powder_fall": 0.8155159104047851,
+          "v_fall_range": [
+            0.36245151573546014,
+            1.4498060629418406
+          ],
+          "v_crossflow": 10.115711700168262,
+          "v_annulus_radial": 0.12331534263062263,
+          "tau_powder_active": 0.3678652938249771,
+          "tau_powder_range": [
+            0.2069242277765496,
+            0.8276969111061984
+          ],
+          "tau_gas_refresh": 0.24327873044850273,
+          "tau_gas_active": 0.02965683571181748,
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "Stokes_number": 105.11633330347078,
+          "d_p_median_um": 75.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.5115711700168262,
+          "risk_gap": 0.25,
+          "risk_standoff": 0,
+          "risk_index": 0.17789279250420653,
+          "risk_acceptable": true,
+          "overall_feasible": true,
+          "T_preheat": 1000,
+          "p_bar": 0.15,
+          "Q_H2_SLPM": 20.0
+        },
+        "1100": {
+          "a_m": 0.012,
+          "b_m": 0.02,
+          "R_tube_m": 0.05,
+          "g_m": 0.030000000000000002,
+          "g_mm": 30.000000000000004,
+          "gap_m": 0.008,
+          "gap_mm": 8.0,
+          "L_m": 0.3,
+          "A_annulus_m2": 0.006597344572538567,
+          "A_active_m2": 0.0008042477193189872,
+          "V_annulus_m3": 0.00197920337176157,
+          "V_active_m3": 0.00024127431579569616,
+          "Q_m3s": 0.00894909187056359,
+          "Q_SLPM_actual": 20.0,
+          "v_powder_fall": 0.7728162860842731,
+          "v_fall_range": [
+            0.34347390492634366,
+            1.3738956197053747
+          ],
+          "v_crossflow": 11.127282870185086,
+          "v_annulus_radial": 0.13564687689368488,
+          "tau_powder_active": 0.3881905769869942,
+          "tau_powder_range": [
+            0.21835719955518423,
+            0.8734287982207369
+          ],
+          "tau_gas_refresh": 0.22116248222591162,
+          "tau_gas_active": 0.026960759738015892,
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "Stokes_number": 109.57379088729205,
+          "d_p_median_um": 75.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.6127282870185087,
+          "risk_gap": 0.25,
+          "risk_standoff": 0,
+          "risk_index": 0.20318207175462716,
+          "risk_acceptable": true,
+          "overall_feasible": true,
+          "T_preheat": 1100,
+          "p_bar": 0.15,
+          "Q_H2_SLPM": 20.0
+        },
+        "1200": {
+          "a_m": 0.012,
+          "b_m": 0.02,
+          "R_tube_m": 0.05,
+          "g_m": 0.030000000000000002,
+          "g_mm": 30.000000000000004,
+          "gap_m": 0.008,
+          "gap_mm": 8.0,
+          "L_m": 0.3,
+          "A_annulus_m2": 0.006597344572538567,
+          "A_active_m2": 0.0008042477193189872,
+          "V_annulus_m3": 0.00197920337176157,
+          "V_active_m3": 0.00024127431579569616,
+          "Q_m3s": 0.009762645676978461,
+          "Q_SLPM_actual": 19.999999999999996,
+          "v_powder_fall": 0.7361273400902543,
+          "v_fall_range": [
+            0.32716770670677975,
+            1.308670826827119
+          ],
+          "v_crossflow": 12.138854040201913,
+          "v_annulus_radial": 0.14797841115674715,
+          "tau_powder_active": 0.4075381848515746,
+          "tau_powder_range": [
+            0.22924022897901067,
+            0.9169609159160427
+          ],
+          "tau_gas_refresh": 0.20273227537375232,
+          "tau_gas_active": 0.024714029759847902,
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "Stokes_number": 113.86019053599819,
+          "d_p_median_um": 75.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.7138854040201914,
+          "risk_gap": 0.25,
+          "risk_standoff": 0,
+          "risk_index": 0.22847135100504784,
+          "risk_acceptable": true,
+          "overall_feasible": true,
+          "T_preheat": 1200,
+          "p_bar": 0.15,
+          "Q_H2_SLPM": 20.0
+        }
+      },
+      "feasible": {
+        "1000": {
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "risk_acceptable": true,
+          "overall_feasible": true
+        },
+        "1100": {
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "risk_acceptable": true,
+          "overall_feasible": true
+        },
+        "1200": {
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "risk_acceptable": true,
+          "overall_feasible": true
+        }
+      }
+    },
+    "Balanced": {
+      "name": "Balanced",
+      "geometry": {
+        "a_mm": 4.0,
+        "b_mm": 20.0,
+        "gap_mm": 16.0,
+        "description": "Small pin, moderate gap, good coverage"
+      },
+      "operating_points": [],
+      "required_V": {
+        "1000": {
+          "0": {
+            "0.1": 530.0,
+            "0.2": 670.0,
+            "0.4": 890.0,
+            "0.6": 1060.0
+          },
+          "0.2": {
+            "0.1": 520.0,
+            "0.2": 660.0,
+            "0.4": 870.0,
+            "0.6": 1040.0
+          },
+          "0.4": {
+            "0.1": 520.0,
+            "0.2": 650.0,
+            "0.4": 860.0,
+            "0.6": 1030.0
+          }
+        },
+        "1100": {
+          "0": {
+            "0.1": 500.0,
+            "0.2": 630.0,
+            "0.4": 840.0,
+            "0.6": 1000.0
+          },
+          "0.2": {
+            "0.1": 490.0,
+            "0.2": 620.0,
+            "0.4": 820.0,
+            "0.6": 980.0
+          },
+          "0.4": {
+            "0.1": 490.0,
+            "0.2": 610.0,
+            "0.4": 810.0,
+            "0.6": 970.0
+          }
+        },
+        "1200": {
+          "0": {
+            "0.1": 470.0,
+            "0.2": 600.0,
+            "0.4": 790.0,
+            "0.6": 940.0
+          },
+          "0.2": {
+            "0.1": 470.0,
+            "0.2": 590.0,
+            "0.4": 780.0,
+            "0.6": 930.0
+          },
+          "0.4": {
+            "0.1": 460.0,
+            "0.2": 580.0,
+            "0.4": 760.0,
+            "0.6": 910.0
+          }
+        }
+      },
+      "constraints": {
+        "1000": {
+          "a_m": 0.004,
+          "b_m": 0.02,
+          "R_tube_m": 0.05,
+          "g_m": 0.030000000000000002,
+          "g_mm": 30.000000000000004,
+          "gap_m": 0.016,
+          "gap_mm": 16.0,
+          "L_m": 0.3,
+          "A_annulus_m2": 0.006597344572538567,
+          "A_active_m2": 0.0012063715789784805,
+          "V_annulus_m3": 0.00197920337176157,
+          "V_active_m3": 0.00036191147369354416,
+          "Q_m3s": 0.008135538064148719,
+          "Q_SLPM_actual": 20.0,
+          "v_powder_fall": 0.8155159104047851,
+          "v_fall_range": [
+            0.36245151573546014,
+            1.4498060629418406
+          ],
+          "v_crossflow": 6.743807800112176,
+          "v_annulus_radial": 0.12331534263062263,
+          "tau_powder_active": 0.3678652938249771,
+          "tau_powder_range": [
+            0.2069242277765496,
+            0.8276969111061984
+          ],
+          "tau_gas_refresh": 0.24327873044850273,
+          "tau_gas_active": 0.04448525356772621,
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "Stokes_number": 35.0387777678236,
+          "d_p_median_um": 75.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.1743807800112176,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "risk_index": 0.0435951950028044,
+          "risk_acceptable": true,
+          "overall_feasible": true,
+          "T_preheat": 1000,
+          "p_bar": 0.15,
+          "Q_H2_SLPM": 20.0
+        },
+        "1100": {
+          "a_m": 0.004,
+          "b_m": 0.02,
+          "R_tube_m": 0.05,
+          "g_m": 0.030000000000000002,
+          "g_mm": 30.000000000000004,
+          "gap_m": 0.016,
+          "gap_mm": 16.0,
+          "L_m": 0.3,
+          "A_annulus_m2": 0.006597344572538567,
+          "A_active_m2": 0.0012063715789784805,
+          "V_annulus_m3": 0.00197920337176157,
+          "V_active_m3": 0.00036191147369354416,
+          "Q_m3s": 0.00894909187056359,
+          "Q_SLPM_actual": 20.0,
+          "v_powder_fall": 0.7728162860842731,
+          "v_fall_range": [
+            0.34347390492634366,
+            1.3738956197053747
+          ],
+          "v_crossflow": 7.418188580123393,
+          "v_annulus_radial": 0.13564687689368488,
+          "tau_powder_active": 0.3881905769869942,
+          "tau_powder_range": [
+            0.21835719955518423,
+            0.8734287982207369
+          ],
+          "tau_gas_refresh": 0.22116248222591162,
+          "tau_gas_active": 0.040441139607023835,
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "Stokes_number": 36.52459696243069,
+          "d_p_median_um": 75.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.24181885801233927,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "risk_index": 0.06045471450308482,
+          "risk_acceptable": true,
+          "overall_feasible": true,
+          "T_preheat": 1100,
+          "p_bar": 0.15,
+          "Q_H2_SLPM": 20.0
+        },
+        "1200": {
+          "a_m": 0.004,
+          "b_m": 0.02,
+          "R_tube_m": 0.05,
+          "g_m": 0.030000000000000002,
+          "g_mm": 30.000000000000004,
+          "gap_m": 0.016,
+          "gap_mm": 16.0,
+          "L_m": 0.3,
+          "A_annulus_m2": 0.006597344572538567,
+          "A_active_m2": 0.0012063715789784805,
+          "V_annulus_m3": 0.00197920337176157,
+          "V_active_m3": 0.00036191147369354416,
+          "Q_m3s": 0.009762645676978461,
+          "Q_SLPM_actual": 19.999999999999996,
+          "v_powder_fall": 0.7361273400902543,
+          "v_fall_range": [
+            0.32716770670677975,
+            1.308670826827119
+          ],
+          "v_crossflow": 8.09256936013461,
+          "v_annulus_radial": 0.14797841115674715,
+          "tau_powder_active": 0.4075381848515746,
+          "tau_powder_range": [
+            0.22924022897901067,
+            0.9169609159160427
+          ],
+          "tau_gas_refresh": 0.20273227537375232,
+          "tau_gas_active": 0.037071044639771844,
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "Stokes_number": 37.95339684533273,
+          "d_p_median_um": 75.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.30925693601346094,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "risk_index": 0.07731423400336523,
+          "risk_acceptable": true,
+          "overall_feasible": true,
+          "T_preheat": 1200,
+          "p_bar": 0.15,
+          "Q_H2_SLPM": 20.0
+        }
+      },
+      "feasible": {
+        "1000": {
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "risk_acceptable": true,
+          "overall_feasible": true
+        },
+        "1100": {
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "risk_acceptable": true,
+          "overall_feasible": true
+        },
+        "1200": {
+          "tau_powder_valid": true,
+          "tau_gas_refresh_flag": false,
+          "risk_acceptable": true,
+          "overall_feasible": true
+        }
+      }
+    }
+  },
+  "rankings": {
+    "candidates": [
+      {
+        "name": "Conservative",
+        "geometry": {
+          "a_mm": 8.0,
+          "b_mm": 26.0,
+          "gap_mm": 18.0,
+          "description": "Wide gap, moderate E-field, safer thermal margin"
+        },
+        "min_V_40": 820.0,
+        "min_risk": 0.0,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 820.0,
+          "risk_index": 0.001942264472699795
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.19209541313336326,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 20.371017042227137,
+          "risk_index": 0.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.0,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "v_crossflow": 4.654549697332325,
+          "g_mm": 24.000000000000004,
+          "gap_mm": 18.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5,
+        "V_normalized": 1.0,
+        "risk_normalized": 0.0
+      },
+      {
+        "name": "Aggressive",
+        "geometry": {
+          "a_mm": 12.0,
+          "b_mm": 20.0,
+          "gap_mm": 8.0,
+          "description": "Narrow gap, high E-field, optimal activation"
+        },
+        "min_V_40": 390.0,
+        "min_risk": 0.17789279250420653,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 390.0,
+          "risk_index": 0.22847135100504784
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.22116248222591162,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 109.57379088729205,
+          "risk_index": 0.20318207175462716,
+          "risk_stokes": 0,
+          "risk_velocity": 0.6127282870185087,
+          "risk_gap": 0.25,
+          "risk_standoff": 0,
+          "v_crossflow": 11.127282870185086,
+          "g_mm": 30.000000000000004,
+          "gap_mm": 8.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5,
+        "V_normalized": 0.0,
+        "risk_normalized": 1.0
+      },
+      {
+        "name": "Balanced",
+        "geometry": {
+          "a_mm": 4.0,
+          "b_mm": 20.0,
+          "gap_mm": 16.0,
+          "description": "Small pin, moderate gap, good coverage"
+        },
+        "min_V_40": 760.0,
+        "min_risk": 0.0435951950028044,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 760.0,
+          "risk_index": 0.07731423400336523
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.22116248222591162,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 36.52459696243069,
+          "risk_index": 0.06045471450308482,
+          "risk_stokes": 0,
+          "risk_velocity": 0.24181885801233927,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "v_crossflow": 7.418188580123393,
+          "g_mm": 30.000000000000004,
+          "gap_mm": 16.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5527647709096883,
+        "V_normalized": 0.8604651162790697,
+        "risk_normalized": 0.24506442554030697
+      }
+    ],
+    "rank_by_V": [
+      {
+        "name": "Aggressive",
+        "geometry": {
+          "a_mm": 12.0,
+          "b_mm": 20.0,
+          "gap_mm": 8.0,
+          "description": "Narrow gap, high E-field, optimal activation"
+        },
+        "min_V_40": 390.0,
+        "min_risk": 0.17789279250420653,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 390.0,
+          "risk_index": 0.22847135100504784
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.22116248222591162,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 109.57379088729205,
+          "risk_index": 0.20318207175462716,
+          "risk_stokes": 0,
+          "risk_velocity": 0.6127282870185087,
+          "risk_gap": 0.25,
+          "risk_standoff": 0,
+          "v_crossflow": 11.127282870185086,
+          "g_mm": 30.000000000000004,
+          "gap_mm": 8.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5,
+        "V_normalized": 0.0,
+        "risk_normalized": 1.0
+      },
+      {
+        "name": "Balanced",
+        "geometry": {
+          "a_mm": 4.0,
+          "b_mm": 20.0,
+          "gap_mm": 16.0,
+          "description": "Small pin, moderate gap, good coverage"
+        },
+        "min_V_40": 760.0,
+        "min_risk": 0.0435951950028044,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 760.0,
+          "risk_index": 0.07731423400336523
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.22116248222591162,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 36.52459696243069,
+          "risk_index": 0.06045471450308482,
+          "risk_stokes": 0,
+          "risk_velocity": 0.24181885801233927,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "v_crossflow": 7.418188580123393,
+          "g_mm": 30.000000000000004,
+          "gap_mm": 16.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5527647709096883,
+        "V_normalized": 0.8604651162790697,
+        "risk_normalized": 0.24506442554030697
+      },
+      {
+        "name": "Conservative",
+        "geometry": {
+          "a_mm": 8.0,
+          "b_mm": 26.0,
+          "gap_mm": 18.0,
+          "description": "Wide gap, moderate E-field, safer thermal margin"
+        },
+        "min_V_40": 820.0,
+        "min_risk": 0.0,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 820.0,
+          "risk_index": 0.001942264472699795
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.19209541313336326,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 20.371017042227137,
+          "risk_index": 0.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.0,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "v_crossflow": 4.654549697332325,
+          "g_mm": 24.000000000000004,
+          "gap_mm": 18.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5,
+        "V_normalized": 1.0,
+        "risk_normalized": 0.0
+      }
+    ],
+    "rank_by_risk": [
+      {
+        "name": "Conservative",
+        "geometry": {
+          "a_mm": 8.0,
+          "b_mm": 26.0,
+          "gap_mm": 18.0,
+          "description": "Wide gap, moderate E-field, safer thermal margin"
+        },
+        "min_V_40": 820.0,
+        "min_risk": 0.0,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 820.0,
+          "risk_index": 0.001942264472699795
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.19209541313336326,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 20.371017042227137,
+          "risk_index": 0.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.0,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "v_crossflow": 4.654549697332325,
+          "g_mm": 24.000000000000004,
+          "gap_mm": 18.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5,
+        "V_normalized": 1.0,
+        "risk_normalized": 0.0
+      },
+      {
+        "name": "Balanced",
+        "geometry": {
+          "a_mm": 4.0,
+          "b_mm": 20.0,
+          "gap_mm": 16.0,
+          "description": "Small pin, moderate gap, good coverage"
+        },
+        "min_V_40": 760.0,
+        "min_risk": 0.0435951950028044,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 760.0,
+          "risk_index": 0.07731423400336523
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.22116248222591162,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 36.52459696243069,
+          "risk_index": 0.06045471450308482,
+          "risk_stokes": 0,
+          "risk_velocity": 0.24181885801233927,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "v_crossflow": 7.418188580123393,
+          "g_mm": 30.000000000000004,
+          "gap_mm": 16.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5527647709096883,
+        "V_normalized": 0.8604651162790697,
+        "risk_normalized": 0.24506442554030697
+      },
+      {
+        "name": "Aggressive",
+        "geometry": {
+          "a_mm": 12.0,
+          "b_mm": 20.0,
+          "gap_mm": 8.0,
+          "description": "Narrow gap, high E-field, optimal activation"
+        },
+        "min_V_40": 390.0,
+        "min_risk": 0.17789279250420653,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 390.0,
+          "risk_index": 0.22847135100504784
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.22116248222591162,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 109.57379088729205,
+          "risk_index": 0.20318207175462716,
+          "risk_stokes": 0,
+          "risk_velocity": 0.6127282870185087,
+          "risk_gap": 0.25,
+          "risk_standoff": 0,
+          "v_crossflow": 11.127282870185086,
+          "g_mm": 30.000000000000004,
+          "gap_mm": 8.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5,
+        "V_normalized": 0.0,
+        "risk_normalized": 1.0
+      }
+    ],
+    "rank_by_pareto": [
+      {
+        "name": "Conservative",
+        "geometry": {
+          "a_mm": 8.0,
+          "b_mm": 26.0,
+          "gap_mm": 18.0,
+          "description": "Wide gap, moderate E-field, safer thermal margin"
+        },
+        "min_V_40": 820.0,
+        "min_risk": 0.0,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 820.0,
+          "risk_index": 0.001942264472699795
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.19209541313336326,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 20.371017042227137,
+          "risk_index": 0.0,
+          "risk_stokes": 0,
+          "risk_velocity": 0.0,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "v_crossflow": 4.654549697332325,
+          "g_mm": 24.000000000000004,
+          "gap_mm": 18.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5,
+        "V_normalized": 1.0,
+        "risk_normalized": 0.0
+      },
+      {
+        "name": "Aggressive",
+        "geometry": {
+          "a_mm": 12.0,
+          "b_mm": 20.0,
+          "gap_mm": 8.0,
+          "description": "Narrow gap, high E-field, optimal activation"
+        },
+        "min_V_40": 390.0,
+        "min_risk": 0.17789279250420653,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 390.0,
+          "risk_index": 0.22847135100504784
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.22116248222591162,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 109.57379088729205,
+          "risk_index": 0.20318207175462716,
+          "risk_stokes": 0,
+          "risk_velocity": 0.6127282870185087,
+          "risk_gap": 0.25,
+          "risk_standoff": 0,
+          "v_crossflow": 11.127282870185086,
+          "g_mm": 30.000000000000004,
+          "gap_mm": 8.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5,
+        "V_normalized": 0.0,
+        "risk_normalized": 1.0
+      },
+      {
+        "name": "Balanced",
+        "geometry": {
+          "a_mm": 4.0,
+          "b_mm": 20.0,
+          "gap_mm": 16.0,
+          "description": "Small pin, moderate gap, good coverage"
+        },
+        "min_V_40": 760.0,
+        "min_risk": 0.0435951950028044,
+        "best_config": {
+          "T_preheat": 1200,
+          "gamma_RF": 0.4,
+          "V_40": 760.0,
+          "risk_index": 0.07731423400336523
+        },
+        "constraints": {
+          "tau_powder_active": 0.3881905769869942,
+          "tau_gas_refresh": 0.22116248222591162,
+          "tau_gas_refresh_flag": false,
+          "tau_powder_valid": true,
+          "Stokes_number": 36.52459696243069,
+          "risk_index": 0.06045471450308482,
+          "risk_stokes": 0,
+          "risk_velocity": 0.24181885801233927,
+          "risk_gap": 0,
+          "risk_standoff": 0,
+          "v_crossflow": 7.418188580123393,
+          "g_mm": 30.000000000000004,
+          "gap_mm": 16.0,
+          "overall_feasible": true
+        },
+        "any_feasible": true,
+        "pareto_score": 0.5527647709096883,
+        "V_normalized": 0.8604651162790697,
+        "risk_normalized": 0.24506442554030697
+      }
+    ]
+  }
+}

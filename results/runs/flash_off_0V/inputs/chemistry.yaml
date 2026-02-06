@@ -1,0 +1,25 @@
+dissociation:
+  enabled: true
+  k_diss_model: arrhenius
+  k_diss_params:
+    A: 1.0e-14
+    Ea: 43500.0
+    Te_ref: 11600.0
+flash_off: true
+gas_recombination:
+  enabled: false
+  k_rec: 1.0e-15
+initial_concentrations:
+  H: 0.0
+  H2: 0.4
+  H2O: 0.0
+r_act: 0.0
+reduction:
+  enabled: false
+  k_red_model: flash_modified_arrhenius
+  k_red_params:
+    A: 0.0
+    Ea_base: 80000.0
+version: v1.0-minimal
+wall_recombination:
+  gamma_H: 0.1

@@ -1,0 +1,29 @@
+bias:
+  enabled: true
+  voltage: 1000.0
+em:
+  mode: surrogate
+  surrogate:
+    I_coil: 10.0
+    calibration:
+      B_measured: null
+      r_cal: 0.025
+      z_cal: 0.1
+    sigma_eff: 0.1
+flow:
+  H2_inlet: 5.0e-05
+  inlet_temperature: 300.0
+plasma:
+  Te_initial: 10000.0
+  ne_initial: 1.0e17
+pressure:
+  total: 1000.0
+rf_power:
+  forward: 5000.0
+  frequency: 13560000.0
+thermal:
+  wall_bc_type: fixed
+  wall_temperature: 400.0
+time:
+  end_time: null
+  mode: steady

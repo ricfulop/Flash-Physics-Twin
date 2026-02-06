@@ -1,0 +1,13 @@
+{
+  "run_id": "em_coil_2026-02-01_040654",
+  "timestamp_utc": "2026-02-01T04:06:54Z",
+  "toolchain": {
+    "em": "COMSOL-ACDC",
+    "reactor": "none",
+    "ml": "none"
+  },
+  "model_version": "v1.0-acdc-coil",
+  "physics_engine": "COMSOL-ACDC",
+  "status": "registered",
+  "notes": "sigma_eff sweep: 0.001 S/m"
+}

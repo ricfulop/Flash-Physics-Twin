@@ -1,0 +1,20 @@
+bias:
+  enabled: true
+  voltage: -800.0
+flow:
+  H2_inlet: 5.0e-05
+  inlet_temperature: 300.0
+plasma:
+  Te_initial: 10000.0
+  ne_initial: 1.0e17
+pressure:
+  total: 1000.0
+rf_power:
+  forward: 5000.0
+  frequency: 13.56e6
+thermal:
+  wall_bc_type: fixed
+  wall_temperature: 400.0
+time:
+  end_time: null
+  mode: steady

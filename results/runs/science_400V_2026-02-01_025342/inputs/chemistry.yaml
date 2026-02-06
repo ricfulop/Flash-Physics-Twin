@@ -1,0 +1,40 @@
+# PFR Chemistry Parameters (v1.0-minimal)
+# Minimal chemistry model per PFR_Chemistry_Minimal.md
+
+version: "v1.0-minimal"
+
+# Plasma dissociation: H2 -> 2H
+dissociation:
+  enabled: true
+  # R_diss = k_diss(Te) * ne * c_H2
+  k_diss_model: "arrhenius"
+  k_diss_params:
+    A: 1.0e-14           # [m³/s] pre-exponential
+    Ea: 43500.0          # [J/mol] activation energy (~4.5 eV)
+    Te_ref: 11600.0      # [K] reference temperature (1 eV)
+
+# Gas-phase recombination: H + H -> H2 (optional)
+gas_recombination:
+  enabled: false
+  k_rec: 1.0e-15         # [m³/(mol·s)] if enabled
+
+# Wall recombination (see PFR_BC_Sheath_Model.md)
+wall_recombination:
+  gamma_H: 0.1           # [-] H recombination probability at wall
+  
+# Reduction reaction: MO + H -> M + H2O
+reduction:
+  enabled: true
+  # Rate depends on chi (Flash order parameter)
+  # R_red = k_red(T, chi) * c_H * (1 - extent)
+  k_red_model: "flash_modified_arrhenius"
+  k_red_params:
+    A: 1.0e6             # [1/s] pre-exponential
+    Ea_base: 80000.0     # [J/mol] baseline activation energy
+    # Effective Ea = Ea_base - DeltaB * chi
+    
+# Species initial conditions (mol/m³)
+initial_concentrations:
+  H2: 0.4                # estimated from P, T
+  H: 0.0
+  H2O: 0.0

@@ -1,0 +1,14 @@
+{
+  "run_id": "em_coil_2026-02-01_040516",
+  "timestamp_utc": "2026-02-01T04:05:16Z",
+  "toolchain": {
+    "em": "COMSOL-ACDC",
+    "reactor": "none",
+    "ml": "none"
+  },
+  "model_version": "v1.0-acdc-coil",
+  "physics_engine": "COMSOL-ACDC",
+  "status": "failed",
+  "notes": "test AC/DC coil workflow",
+  "error": "The DType <class 'numpy.dtypes._PyFloatDType'> could not be promoted by <class 'numpy.dtypes.StrDType'>. This means that no common DType exists for the given inputs. For example they cannot be stored in a single array unless the dtype is `object`. The full list of DTypes is: (<class 'numpy.dtypes._PyLongDType'>, <class 'numpy.dtypes.StrDType'>, <class 'numpy.dtypes._PyFloatDType'>)"
+}

@@ -1,0 +1,16 @@
+{
+  "run_id": "test_comsol_001",
+  "timestamp_utc": "2026-02-01T01:08:04.640387Z",
+  "status": "registered",
+  "model_version": "v0.2.0-test",
+  "physics_engine": "COMSOL",
+  "discovery_engine": "NVIDIA-PhysicsNeMo",
+  "notes": "Test run - heat transfer model",
+  "comsol_version": "6.4",
+  "validation": {
+    "valid": true,
+    "issues": [],
+    "timestamp_utc": "2026-02-01T01:08:11.416034Z"
+  },
+  "registered_utc": "2026-02-01T01:08:16.518168Z"
+}

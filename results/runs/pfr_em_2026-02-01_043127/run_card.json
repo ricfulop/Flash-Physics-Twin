@@ -1,0 +1,13 @@
+{
+  "run_id": "pfr_em_2026-02-01_043127",
+  "timestamp_utc": "2026-02-01T04:31:27Z",
+  "toolchain": {
+    "em": "surrogate",
+    "reactor": "COMSOL-coupled",
+    "ml": "none"
+  },
+  "model_version": "v1.0-coupled-em",
+  "physics_engine": "COMSOL-coupled",
+  "status": "registered",
+  "notes": "2D sweep: bias=500V, sigma=0.1S/m"
+}

@@ -1,0 +1,54 @@
+{
+  "sweep_parameters": {
+    "geometries": 35,
+    "total_points": 15750,
+    "feasible": 15660,
+    "high_activation": 12210
+  },
+  "pareto_optimal": [
+    {
+      "a_mm": 6,
+      "b_mm": 18,
+      "gap_mm": 12,
+      "V": 200,
+      "chi": 0.45,
+      "risk": 0.0
+    },
+    {
+      "a_mm": 8,
+      "b_mm": 22,
+      "gap_mm": 14,
+      "V": 200,
+      "chi": 0.46,
+      "risk": 0.0
+    },
+    {
+      "a_mm": 10,
+      "b_mm": 22,
+      "gap_mm": 12,
+      "V": 200,
+      "chi": 0.49,
+      "risk": 0.0
+    },
+    {
+      "a_mm": 12,
+      "b_mm": 26,
+      "gap_mm": 14,
+      "V": 200,
+      "chi": 0.45,
+      "risk": 0.0
+    }
+  ],
+  "recommended": {
+    "a_mm": 10,
+    "b_mm": 22,
+    "gap_mm": 12,
+    "standoff_mm": 28,
+    "T_preheat": 900,
+    "V_bias": 200,
+    "gamma_RF": 0,
+    "Q_H2_SLPM": 10,
+    "chi": 0.493,
+    "risk": 0.0
+  }
+}

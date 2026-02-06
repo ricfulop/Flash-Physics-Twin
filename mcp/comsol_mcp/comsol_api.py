@@ -981,6 +981,11 @@ class ComsolBackend:
         "beta_T": 100.0,          # Temperature coefficient for DeltaG0 (J/mol/K)
                                   # DeltaG0(T) = DeltaG0_ref - beta_T * (T - T_ref)
         "T_max_threshold": 1500.0,  # Threshold for unphysical temperature flag (K)
+        "gamma_RF": 0.2,          # RF-to-Flash coupling efficiency (dimensionless)
+                                  # E_eff = E_bias + gamma_RF * E_RF_induced
+                                  # gamma_RF represents the fraction of RF electric field
+                                  # that contributes to electrochemical barrier reduction
+        "lambda_onset": 60443.0,  # Onset electric field (V/m) for KPI calculations
     }
 
     def export_coupled_fields(
@@ -1161,19 +1166,43 @@ class ComsolBackend:
             E_bias_value = abs(bias_voltage) / gap_distance
             E_bias = np.ones(shape) * E_bias_value
             
+            # ============================================================
+            # E_RF_induced: Induced electric field from B-field
+            # This is the azimuthal electric field induced by time-varying B
+            # E_RF_induced = |E_phi| = omega * r * B_z / 2 (same as E_mag)
+            # ============================================================
+            E_RF_induced = E_mag.copy()  # Already computed from Faraday induction
+            
+            # ============================================================
+            # E_eff: Effective electric field for Flash activation
+            # RF-assisted activation: gamma_RF couples RF field to barrier reduction
+            # E_eff = E_bias + gamma_RF * E_RF_induced
+            # ============================================================
+            gamma_RF = float(tp.get('gamma_RF', 0.2))
+            E_eff = E_bias + gamma_RF * E_RF_induced
+            
             # Write EM group
             em_group.create_dataset('B_mag', data=B_mag)
             em_group.create_dataset('E_mag', data=E_mag)
+            em_group.create_dataset('E_RF_induced', data=E_RF_induced)
             em_group.create_dataset('Q_RF', data=Q_RF)
             em_group.create_dataset('E_bias', data=E_bias)
+            em_group.create_dataset('E_eff', data=E_eff)
             em_group.attrs['B_mag_units'] = 'T'
             em_group.attrs['E_mag_units'] = 'V/m'
+            em_group.attrs['E_RF_induced_units'] = 'V/m'
+            em_group.attrs['E_RF_induced_description'] = 'Induced RF electric field from B-field via Faraday induction'
             em_group.attrs['Q_RF_units'] = 'W/m^3'
             em_group.attrs['E_bias_units'] = 'V/m'
+            em_group.attrs['E_eff_units'] = 'V/m'
+            em_group.attrs['E_eff_formula'] = 'E_eff = E_bias + gamma_RF * E_RF_induced'
+            em_group.attrs['gamma_RF'] = gamma_RF
             em_group.attrs['mode'] = em_mode
             
             Q_RF_total = np.sum(Q_RF * 2 * np.pi * R * dr * dz)
             logger.info(f"  Q_RF: total={Q_RF_total:.2f} W, max={np.max(Q_RF):.2e} W/m³")
+            logger.info(f"  E_RF_induced: max={np.max(E_RF_induced):.2e} V/m")
+            logger.info(f"  E_eff (gamma_RF={gamma_RF}): mean={np.mean(E_eff):.2e}, max={np.max(E_eff):.2e} V/m")
             
             # ============================================================
             # STEP 2: COMPUTE THERMAL FIELDS (T_gas)
@@ -1287,15 +1316,29 @@ class ComsolBackend:
                 # Higher temperature -> lower effective DeltaG0 -> easier activation
                 DeltaG0_T = DeltaG0_ref - beta_T * (T_gas - T_ref)
                 
-                # Barrier reduction from electrochemistry
-                reduction_electro = n * F_const * E_bias * r_act + W_ph + DeltaMu_chem
+                # ============================================================
+                # RF-ASSISTED ACTIVATION:
+                # Use E_eff instead of E_bias for barrier reduction
+                # E_eff = E_bias + gamma_RF * E_RF_induced
+                # This allows RF fields to assist electrochemical activation
+                # ============================================================
+                reduction_electro = n * F_const * E_eff * r_act + W_ph + DeltaMu_chem
                 
-                # Total barrier using temperature-dependent DeltaG0
-                # DeltaB = k_soft * DeltaG0(T) - (n*F*E_bias*r_act + W_ph + DeltaMu_chem)
+                # For comparison: barrier reduction from DC bias only
+                reduction_dc_only = n * F_const * E_bias * r_act + W_ph + DeltaMu_chem
+                
+                # Total barrier using temperature-dependent DeltaG0 and E_eff
+                # DeltaB = k_soft * DeltaG0(T) - (n*F*E_eff*r_act + W_ph + DeltaMu_chem)
                 DeltaB = k_soft * DeltaG0_T - reduction_electro
+                
+                # DeltaB if DC bias only (for comparison)
+                DeltaB_dc_only = k_soft * DeltaG0_T - reduction_dc_only
                 
                 # Flash order parameter
                 chi = 1.0 / (1.0 + np.exp(DeltaB / B_s))
+                
+                # Chi if DC bias only (for RF contribution analysis)
+                chi_dc_only = 1.0 / (1.0 + np.exp(DeltaB_dc_only / B_s))
                 
                 # Validate
                 chi_min, chi_max = float(np.min(chi)), float(np.max(chi))
@@ -1305,6 +1348,12 @@ class ComsolBackend:
                 logger.info(f"  Flash: DeltaG0(T)=[{np.min(DeltaG0_T):.1f}, {np.max(DeltaG0_T):.1f}] J/mol")
                 logger.info(f"  Flash: DeltaB=[{np.min(DeltaB):.1f}, {np.max(DeltaB):.1f}] J/mol")
                 logger.info(f"  Flash: chi=[{chi_min:.4f}, {chi_max:.4f}]")
+                
+                # Log RF contribution
+                chi_dc_max = float(np.max(chi_dc_only))
+                logger.info(f"  Flash: chi_dc_only_max={chi_dc_max:.4f}, chi_with_RF_max={chi_max:.4f}")
+                if chi_max > chi_dc_max + 0.01:
+                    logger.info(f"  → RF-assisted activation contributing +{(chi_max - chi_dc_max)*100:.1f}% to max chi")
             else:
                 # Flash OFF - use reference DeltaG0
                 DeltaB = np.ones(shape) * fp['k_soft'] * fp['DeltaG0']
@@ -1312,30 +1361,48 @@ class ComsolBackend:
             
             flash_group.create_dataset('DeltaB', data=DeltaB)
             flash_group.create_dataset('chi', data=chi)
+            
+            # Store DC-only comparison fields for RF contribution analysis
+            if flash_enabled:
+                flash_group.create_dataset('chi_dc_only', data=chi_dc_only)
+                flash_group.attrs['chi_dc_only_description'] = 'Chi computed with E_bias only (no RF contribution)'
+            
             flash_group.attrs['DeltaB_units'] = 'J/mol'
             flash_group.attrs['chi_units'] = 'dimensionless'
-            flash_group.attrs['formula'] = 'DeltaG0(T) = DeltaG0_ref - beta_T*(T-T_ref); DeltaB = k_soft*DeltaG0(T) - (n*F*E_bias*r_act + W_ph + DeltaMu_chem)'
+            flash_group.attrs['formula'] = 'DeltaG0(T) = DeltaG0_ref - beta_T*(T-T_ref); E_eff = E_bias + gamma_RF*E_RF_induced; DeltaB = k_soft*DeltaG0(T) - (n*F*E_eff*r_act + W_ph + DeltaMu_chem)'
             flash_group.attrs['beta_T'] = beta_T
             flash_group.attrs['T_ref'] = T_ref
+            flash_group.attrs['gamma_RF'] = gamma_RF
         
         logger.info(f"Exported coupled fields to {out_file}")
         return {"fields": str(out_file)}
 
+    # Default powder region bounds
+    POWDER_REGION_DEFAULTS = {
+        'r_min': 0.005,      # [m] inner radius of powder fall region
+        'r_max': 0.035,      # [m] outer radius of powder fall region
+        'z_start': 0.06,     # [m] start of powder fall zone
+        'z_end': 0.14,       # [m] end of powder fall zone
+    }
+    
     def export_coupled_kpis(
         self, 
         run_path: Path, 
         em_mode: str = "surrogate",
-        thermal_params: Optional[Dict[str, float]] = None
+        thermal_params: Optional[Dict[str, float]] = None,
+        powder_region: Optional[Dict[str, float]] = None
     ) -> str:
         """
         Export KPIs for coupled EM + Thermal + Flash simulation.
         
         Includes em.mode and energy-balance KPIs per requirements.
+        Now also includes powder-region-specific KPIs.
         
         Args:
             run_path: Path to run directory
             em_mode: EM source mode ("surrogate" or "comsol")
             thermal_params: Thermal parameters for energy balance estimates
+            powder_region: Dict with 'r_min', 'r_max', 'z_start', 'z_end' for powder fall zone
         """
         outputs_dir = run_path / "outputs"
         outputs_dir.mkdir(exist_ok=True)
@@ -1347,7 +1414,15 @@ class ComsolBackend:
         if thermal_params:
             tp.update(thermal_params)
         
+        # Get powder region bounds
+        pr = dict(self.POWDER_REGION_DEFAULTS)
+        if powder_region:
+            pr.update(powder_region)
+        
         T_max_threshold = float(tp.get('T_max_threshold', 1500.0))
+        
+        # Get lambda_onset for KPI calculation
+        lambda_onset = float(tp.get('lambda_onset', 60443.0))
         
         kpis = {
             "em": {
@@ -1358,14 +1433,36 @@ class ComsolBackend:
                 "E_mag_min": 0.0,
                 "E_mag_mean": 0.0,
                 "E_mag_max": 0.0,
+                "E_RF_induced_max": 0.0,
+                "E_eff_mean": 0.0,
+                "E_eff_max": 0.0,
+                "gamma_RF": 0.0,
                 "Q_RF_max": 0.0,
+                # Powder region EM KPIs
+                "powder_E_RF_max": 0.0,
+                "powder_E_RF_mean": 0.0,
+                "powder_E_eff_max": 0.0,
+                "powder_E_eff_mean": 0.0,
+                "powder_B_mag_max": 0.0,
+                "powder_Q_RF_total": 0.0,
             },
             "flash": {
                 "chi_volume_avg": 0.0,
                 "chi_volume_fraction_gt_0p5": 0.0,
+                "chi_dc_only_volume_avg": 0.0,
+                "chi_dc_only_fraction_gt_0p5": 0.0,
                 "DeltaB_min": 0.0,
                 "DeltaB_mean": 0.0,
                 "DeltaB_max": 0.0,
+                "E_eff_over_lambda_fraction": 0.0,  # Fraction of volume where E_eff > lambda_onset
+                "RF_assisted_activation_fraction": 0.0,  # Fraction activated by RF that DC alone wouldn't activate
+                # Powder region Flash KPIs
+                "powder_chi_avg": 0.0,
+                "powder_chi_fraction_gt_0p5": 0.0,
+                "powder_chi_dc_only_fraction_gt_0p5": 0.0,
+                "powder_RF_assisted_activation_fraction": 0.0,
+                "powder_E_eff_over_lambda_fraction": 0.0,
+                "powder_DeltaB_mean": 0.0,
             },
             "reduction": {
                 "rate_integral": 0.0,
@@ -1382,10 +1479,20 @@ class ComsolBackend:
                 "T_min": 0.0,
                 "T_wall_max": 0.0,
                 "unphysical_temperature_flag": False,
+                # Powder region thermal KPIs
+                "powder_T_mean": 0.0,
+                "powder_T_max": 0.0,
             },
             "plasma": {
                 "ne_avg": 0.0,
                 "Te_avg": 0.0,
+            },
+            # Powder region definition stored for reference
+            "powder_region": {
+                "r_min": pr['r_min'],
+                "r_max": pr['r_max'],
+                "z_start": pr['z_start'],
+                "z_end": pr['z_end'],
             }
         }
         
@@ -1402,12 +1509,26 @@ class ComsolBackend:
                     R_inner = float(r[-1])
                     L = float(z[-1])
                     
+                    # Create powder region mask
+                    r_min_powder = pr['r_min']
+                    r_max_powder = pr['r_max']
+                    z_start_powder = pr['z_start']
+                    z_end_powder = pr['z_end']
+                    
+                    powder_mask = (
+                        (R >= r_min_powder) & (R <= r_max_powder) &
+                        (Z >= z_start_powder) & (Z <= z_end_powder)
+                    )
+                    
                     # EM KPIs
                     if 'em/B_mag' in f:
                         B_mag = f['em/B_mag'][:]
                         kpis["em"]["B_mag_min"] = float(np.min(B_mag))
                         kpis["em"]["B_mag_mean"] = float(np.mean(B_mag))
                         kpis["em"]["B_mag_max"] = float(np.max(B_mag))
+                        # Powder region B_mag
+                        if powder_mask.any():
+                            kpis["em"]["powder_B_mag_max"] = float(np.max(B_mag[powder_mask]))
                     
                     if 'em/E_mag' in f:
                         E_mag = f['em/E_mag'][:]
@@ -1420,6 +1541,38 @@ class ComsolBackend:
                         Q_total = float(np.sum(Q_RF * 2 * np.pi * R * dr * dz))
                         kpis["power"]["Q_RF_total"] = Q_total
                         kpis["em"]["Q_RF_max"] = float(np.max(Q_RF))
+                        # Powder region Q_RF
+                        if powder_mask.any():
+                            Q_powder = float(np.sum(Q_RF[powder_mask] * 2 * np.pi * R[powder_mask] * dr * dz))
+                            kpis["em"]["powder_Q_RF_total"] = Q_powder
+                    
+                    # RF-induced field and effective field
+                    if 'em/E_RF_induced' in f:
+                        E_RF_induced = f['em/E_RF_induced'][:]
+                        kpis["em"]["E_RF_induced_max"] = float(np.max(E_RF_induced))
+                        # Powder region E_RF
+                        if powder_mask.any():
+                            kpis["em"]["powder_E_RF_max"] = float(np.max(E_RF_induced[powder_mask]))
+                            kpis["em"]["powder_E_RF_mean"] = float(np.mean(E_RF_induced[powder_mask]))
+                    
+                    if 'em/E_eff' in f:
+                        E_eff = f['em/E_eff'][:]
+                        kpis["em"]["E_eff_mean"] = float(np.mean(E_eff))
+                        kpis["em"]["E_eff_max"] = float(np.max(E_eff))
+                        
+                        # E_eff_over_lambda_fraction: fraction where E_eff > lambda_onset
+                        E_eff_over_lambda = E_eff > lambda_onset
+                        kpis["flash"]["E_eff_over_lambda_fraction"] = float(np.mean(E_eff_over_lambda))
+                        
+                        # Powder region E_eff
+                        if powder_mask.any():
+                            kpis["em"]["powder_E_eff_max"] = float(np.max(E_eff[powder_mask]))
+                            kpis["em"]["powder_E_eff_mean"] = float(np.mean(E_eff[powder_mask]))
+                            kpis["flash"]["powder_E_eff_over_lambda_fraction"] = float(np.mean(E_eff[powder_mask] > lambda_onset))
+                    
+                    # Get gamma_RF from file attributes
+                    if 'em' in f and 'gamma_RF' in f['em'].attrs:
+                        kpis["em"]["gamma_RF"] = float(f['em'].attrs['gamma_RF'])
                     
                     # Thermal KPIs
                     if 'thermal/T_gas' in f:
@@ -1434,6 +1587,11 @@ class ComsolBackend:
                         
                         # Unphysical temperature flag
                         kpis["thermal"]["unphysical_temperature_flag"] = (T_max > T_max_threshold)
+                        
+                        # Powder region thermal KPIs
+                        if powder_mask.any():
+                            kpis["thermal"]["powder_T_mean"] = float(np.mean(T_gas[powder_mask]))
+                            kpis["thermal"]["powder_T_max"] = float(np.max(T_gas[powder_mask]))
                         
                         # Energy balance estimates
                         cp = float(tp['cp_gas'])
@@ -1463,12 +1621,48 @@ class ComsolBackend:
                         chi = f['flash/chi'][:]
                         kpis["flash"]["chi_volume_avg"] = float(np.mean(chi))
                         kpis["flash"]["chi_volume_fraction_gt_0p5"] = float(np.mean(chi > 0.5))
+                        
+                        # Powder region chi KPIs
+                        if powder_mask.any():
+                            kpis["flash"]["powder_chi_avg"] = float(np.mean(chi[powder_mask]))
+                            kpis["flash"]["powder_chi_fraction_gt_0p5"] = float(np.mean(chi[powder_mask] > 0.5))
+                        
+                        # DC-only comparison for RF contribution analysis
+                        if 'flash/chi_dc_only' in f:
+                            chi_dc_only = f['flash/chi_dc_only'][:]
+                            kpis["flash"]["chi_dc_only_volume_avg"] = float(np.mean(chi_dc_only))
+                            kpis["flash"]["chi_dc_only_fraction_gt_0p5"] = float(np.mean(chi_dc_only > 0.5))
+                            
+                            # RF_assisted_activation_fraction:
+                            # Fraction of volume that is activated (chi > 0.5) with RF assistance
+                            # but would NOT be activated by DC alone (chi_dc_only < 0.5)
+                            rf_assisted = (chi > 0.5) & (chi_dc_only < 0.5)
+                            kpis["flash"]["RF_assisted_activation_fraction"] = float(np.mean(rf_assisted))
+                            
+                            # Powder region RF-assisted KPIs
+                            if powder_mask.any():
+                                powder_dc_only = chi_dc_only[powder_mask]
+                                powder_chi = chi[powder_mask]
+                                kpis["flash"]["powder_chi_dc_only_fraction_gt_0p5"] = float(np.mean(powder_dc_only > 0.5))
+                                powder_rf_assisted = (powder_chi > 0.5) & (powder_dc_only < 0.5)
+                                kpis["flash"]["powder_RF_assisted_activation_fraction"] = float(np.mean(powder_rf_assisted))
+                            
+                            logger.info(f"  RF contribution: chi_dc_only_avg={np.mean(chi_dc_only):.4f}, "
+                                       f"RF_assisted_fraction={np.mean(rf_assisted)*100:.1f}%")
+                            if powder_mask.any():
+                                logger.info(f"  Powder region: chi_avg={kpis['flash']['powder_chi_avg']:.4f}, "
+                                           f"chi>0.5={kpis['flash']['powder_chi_fraction_gt_0p5']*100:.1f}%, "
+                                           f"RF_assist={kpis['flash']['powder_RF_assisted_activation_fraction']*100:.1f}%")
                     
                     if 'flash/DeltaB' in f:
                         DeltaB = f['flash/DeltaB'][:]
                         kpis["flash"]["DeltaB_min"] = float(np.min(DeltaB))
                         kpis["flash"]["DeltaB_mean"] = float(np.mean(DeltaB))
                         kpis["flash"]["DeltaB_max"] = float(np.max(DeltaB))
+                        
+                        # Powder region DeltaB
+                        if powder_mask.any():
+                            kpis["flash"]["powder_DeltaB_mean"] = float(np.mean(DeltaB[powder_mask]))
                     
                     # Plasma KPIs
                     if 'plasma/ne' in f:

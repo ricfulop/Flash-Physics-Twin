@@ -1,0 +1,33 @@
+acdc_coil:
+  I_coil: 10.0
+  f_RF: 13560000.0
+  model_type: axisym
+  sigma_eff: 0.01
+coordinate_system: axisymmetric
+electrodes:
+  bias:
+    z_position: 100e-3
+  rf_coil:
+    coil_radius: 60e-3
+    n_turns: 5
+    wire_radius: 2e-3
+    z_end: 150e-3
+    z_start: 50e-3
+inlet:
+  radius: 10e-3
+  z_position: 0.0
+outlet:
+  radius: 15e-3
+  z_position: 200e-3
+quartz_tube:
+  epsilon_r: 3.75
+  inner_radius: 0.0508
+  outer_radius: 0.0558
+reactor:
+  length: 200e-3
+  radius: 0.0508
+  wall_thickness: 5e-3
+sample:
+  radius: 25e-3
+  thickness: 10e-3
+  z_position: 100e-3

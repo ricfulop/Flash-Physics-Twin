@@ -1,0 +1,47 @@
+{
+  "em": {
+    "mode": "surrogate",
+    "B_mag_min": 0.00029326133271036534,
+    "B_mag_mean": 0.0015808198491892597,
+    "B_mag_max": 0.002513274122871835,
+    "E_mag_min": 0.0,
+    "E_mag_mean": 1590.3618539913668,
+    "E_mag_max": 3550.2907884901188,
+    "E_RF_induced_max": 3550.2907884901188,
+    "E_eff_mean": 10795.180926995685,
+    "E_eff_max": 11775.145394245059,
+    "gamma_RF": 0.5,
+    "Q_RF_max": 630228.2341418895
+  },
+  "flash": {
+    "chi_volume_avg": 2.4415628900386575e-08,
+    "chi_volume_fraction_gt_0p5": 0.0,
+    "chi_dc_only_volume_avg": 1.4399479160647514e-08,
+    "chi_dc_only_fraction_gt_0p5": 0.0,
+    "DeltaB_min": 245214.06576407203,
+    "DeltaB_mean": 273415.2350829756,
+    "DeltaB_max": 292109.0,
+    "E_eff_over_lambda_fraction": 0.0,
+    "RF_assisted_activation_fraction": 0.0
+  },
+  "reduction": {
+    "rate_integral": 0.0,
+    "extent_proxy": 0.0
+  },
+  "power": {
+    "Q_RF_total": 451.57789313211197,
+    "convective_removal_estimate": 7.045191506276843,
+    "wall_loss_estimate": 449.7450365864115
+  },
+  "thermal": {
+    "T_max": 1572.9028622578783,
+    "T_mean": 1340.9038301255368,
+    "T_min": 1200.0,
+    "T_wall_max": 1200.0,
+    "unphysical_temperature_flag": true
+  },
+  "plasma": {
+    "ne_avg": 3.081807660251074e+18,
+    "Te_avg": 10500.0
+  }
+}

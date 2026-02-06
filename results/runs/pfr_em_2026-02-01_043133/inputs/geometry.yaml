@@ -1,0 +1,45 @@
+# PFR Geometry Parameters (v1.0-minimal)
+# Axisymmetric reactor geometry
+
+coordinate_system: axisymmetric
+
+reactor:
+  radius: 0.0508         # [m] inner radius (2 inch = 50.8mm)
+  length: 0.2            # [m] reactor length (200mm)
+  wall_thickness: 0.005  # [m] wall thickness (5mm)
+
+sample:
+  radius: 0.025          # [m] sample radius (25mm)
+  thickness: 0.01        # [m] sample thickness (10mm)
+  z_position: 0.1        # [m] sample center z-position (100mm)
+
+inlet:
+  radius: 0.01           # [m] gas inlet radius (10mm)
+  z_position: 0.0        # [m] inlet z-position
+
+outlet:
+  radius: 0.015          # [m] gas outlet radius (15mm)
+  z_position: 0.2        # [m] outlet z-position (200mm)
+
+electrodes:
+  rf_coil:
+    z_start: 0.05        # [m] RF coil start position (50mm)
+    z_end: 0.15          # [m] RF coil end position (150mm)
+    n_turns: 5           # number of turns
+    coil_radius: 0.06    # [m] coil mean radius (60mm, outside quartz tube)
+    wire_radius: 0.002   # [m] coil wire radius (2mm)
+  bias:
+    z_position: 0.1      # [m] bias electrode position (100mm)
+
+# Quartz tube (used for AC/DC coil model)
+quartz_tube:
+  inner_radius: 0.0508   # [m] same as reactor.radius
+  outer_radius: 0.0558   # [m] inner + wall_thickness
+  epsilon_r: 3.75        # relative permittivity of quartz
+
+# AC/DC coil model defaults
+acdc_coil:
+  I_coil: 10.0           # [A] coil current amplitude
+  f_RF: 13560000.0       # [Hz] RF frequency (13.56 MHz)
+  sigma_eff: 0.01        # [S/m] effective plasma conductivity (default small)
+  model_type: "axisym"   # "axisym" or "3d"

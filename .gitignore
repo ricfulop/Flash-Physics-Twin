@@ -16,11 +16,23 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Project specific
+# Project specific - large binary files
+*.mph
+*.mph.lock
+*.h5
+*.hdf5
+
+# Ignore run outputs subdirectories
 results/runs/*/outputs/
 results/runs/*/logs/
 results/runs/*/plots/
-*.mph.lock
+results/runs/*/models/
+
+# Ignore sweep run data (large binary files)
+results/*/runs/*/outputs/
+results/*/runs/*/models/
+results/powder_trade_curves/
+results/rf_sweep_powder/
 
 # Keep run structure but ignore large outputs
 !results/runs/**/run_card.json
